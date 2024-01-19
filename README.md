@@ -90,7 +90,7 @@ chmod 644 /var/scatool/incoming/*
 ```
 podman logs scamonitor
 ```
-10.  When finished, the JSON and HTML SCA Report files will be saved in the `/var/scatool/reports` directory
+10.  When finished, the HTML and JSON SCA Report files will be saved in the `/var/scatool/reports` directory
 ```
 ls -l /var/scatool/reports
 ```
