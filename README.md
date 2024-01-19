@@ -5,8 +5,8 @@ A rootless podman container to analyze SLES11, SLES12, SLES15 and ALP1 supportco
 ## Directories
 
 * `/var/scatool/incoming` - Supportconfig tarball files you want analyzed
-* `/var/scatool/reports`  - SCA Report files in both JSON and HTML formats
-* `/var/scatool/logs`     - scatool logs and shared files
+* `/var/scatool/reports` - SCA Report files in both HTML and JSON formats
+* `/var/scatool/logs` - scatool logs and shared files
 
 # Installation
 
@@ -19,10 +19,10 @@ A rootless podman container to analyze SLES11, SLES12, SLES15 and ALP1 supportco
 # Configuration
 
 1.    Login as **root**:
-1.1   `useradd -m scawork`
-1.2   `passwd scawork`
-1.3   `echo 'LOCAL_PODMAN_USERS=scawork' >> /etc/supportutils/supportconfig.conf`
-1.4   `sed -i -e 's/GRUB_CMDLINE_LINUX_DEFAULT="/GRUB_CMDLINE_LINUX_DEFAULT="systemd.unified_cgroup_hierarchy=1 /g' /etc/default/grub`
+1.1.   `useradd -m scawork`
+1.1.   `passwd scawork`
+1.1.   `echo 'LOCAL_PODMAN_USERS=scawork' >> /etc/supportutils/supportconfig.conf`
+1.1.  `sed -i -e 's/GRUB_CMDLINE_LINUX_DEFAULT="/GRUB_CMDLINE_LINUX_DEFAULT="systemd.unified_cgroup_hierarchy=1 /g' /etc/default/grub`
 
 1.5   **On ALP1**
 1.5.1 `transactional-update run grub2-mkconfig -o /boot/grub2/grub.cfg`
