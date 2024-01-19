@@ -74,26 +74,26 @@ podman generate systemd --new --name scamonitor > ~/.config/systemd/user/contain
 systemctl --user daemon-reload
 systemctl --user enable container-scamonitor.service
 ```
-9.  Reboot
-10.  Login as **scawork**
-11.  Check the container's status
+3.  Reboot
+4.  Login as **scawork**
+5.  Check the container's status
 ```
 systemctl --user status container-scamonitor.service
 ```
-12.  Run supportconfig on various servers
-13.  Copy the desired supportconfig tarballs to `scawork@<your_host>:/var/scatool/incoming`
-14.  Change the permissions so the container can read the supportconfigs
+6.  Run supportconfig on various servers
+7.  Copy the desired supportconfig tarballs to `scawork@<your_host>:/var/scatool/incoming`
+8.  Change the permissions so the container can read the supportconfigs
 ```
 chmod 644 /var/scatool/incoming/*
 ```
-15.  Check to see if the SCA Reports have finished.
+9.  Check to see if the SCA Reports have finished.
 ```
 podman logs scamonitor
 ```
-17.  When finished, the JSON and HTML SCA Report files will be saved in the /var/scatool/reports directory.
+10.  When finished, the JSON and HTML SCA Report files will be saved in the /var/scatool/reports directory.
      > ls -l /var/scatool/reports
-18.  Repeat steps 13-16 for any new additional supportconfigs to analyze
-19.  Check the status of the running scamonitor container with one of the following:
+11.  Repeat steps 13-16 for any new additional supportconfigs to analyze
+12.  Check the status of the running scamonitor container with one of the following:
 ```
 systemctl --user status container-scamonitor
 podman logs scamonitor
