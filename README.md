@@ -1,12 +1,12 @@
 # SCA Tool Container
 
-This is a rootless podman container, called scatool, that analyzes SLES11, SLES12, SLES15 and ALP1 supportconfig tar files placed in the `/var/scatool/incoming` directory. The resulting SCA Report files will be placed in the `/var/scatool/reports` directory in HTML and JSON formats. Log files from the analysis session are placed in `/var/scatool/logs`.
+A rootless podman container to analyze SLES11, SLES12, SLES15 and ALP1 supportconfig tar files placed in the `/var/scatool/incoming` directory. The resulting SCA Report files will be placed in the `/var/scatool/reports` directory in HTML and JSON formats. Log files from the analysis session are placed in `/var/scatool/logs`.
 
 ## Directories
 
-`/var/scatool/incoming` - Supportconfig tarball files you want analyzed
-`/var/scatool/reports`  - SCA Report files in both JSON and HTML formats
-`/var/scatool/logs`     - scatool logs and shared files
+* `/var/scatool/incoming` - Supportconfig tarball files you want analyzed
+* `/var/scatool/reports`  - SCA Report files in both JSON and HTML formats
+* `/var/scatool/logs`     - scatool logs and shared files
 
 # Installation
 
