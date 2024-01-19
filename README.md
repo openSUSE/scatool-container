@@ -90,9 +90,11 @@ chmod 644 /var/scatool/incoming/*
 ```
 podman logs scamonitor
 ```
-10.  When finished, the JSON and HTML SCA Report files will be saved in the /var/scatool/reports directory.
-     > ls -l /var/scatool/reports
-11.  Repeat steps 13-16 for any new additional supportconfigs to analyze
+10.  When finished, the JSON and HTML SCA Report files will be saved in the `/var/scatool/reports` directory
+```
+ls -l /var/scatool/reports
+```
+11.  Repeat steps 7-10 for any new additional supportconfigs to analyze
 12.  Check the status of the running scamonitor container with one of the following:
 ```
 systemctl --user status container-scamonitor
@@ -102,23 +104,37 @@ podman logs scamonitor
 ## Option B) Running the Container as Needed:
 1.  Follow the Configuration steps above
 2.  Login as **scawork**
-3   > podman run -d --rm -v scavol:/var/scatool:z scatool:latest
-4.  Run supportconfig as various servers
-5.  Copy the desired supportconfig tarballs to scawork@<your_host>:/var/scatool/incoming
+3   Run the container to initialize the volume
+```
+podman run -d --rm -v scavol:/var/scatool:z scatool:latest
+```
+4.  Run supportconfig on various servers
+5.  Copy the desired supportconfig tarballs to `scawork@<your_host>:/var/scatool/incoming`
 6.  Change the permissions so the container can read the supportconfigs
-    > chmod 644 /var/scatool/incoming/*
-7.  Each time you want to anlyze supportconfigs in the incoming directory, run:
-    > podman run -dt --rm -v scavol:/var/scatool:z scatool:latest
-8.  When finished, the JSON and HTML SCA Report files will be saved in the /var/scatool/reports directory.
-    > ls -l /var/scatool/reports
+```
+chmod 644 /var/scatool/incoming/*
+```
+7.  Run the scatool container to analyze all supportconfigs in the incoming directory
+```
+podman run -dt --rm -v scavol:/var/scatool:z scatool:latest
+```
+8.  When finished, the HTML and JSON SCA Report files will be saved in the `/var/scatool/reports` directory.
+```
+ls -l /var/scatool/reports
+```
 9.  Repeat steps 5-8 for any new additional supportconfigs to analyze
 
-#Running the Container with a Shell
+# Running the Container with a Shell
 
-`podman run -it -v scavol:/var/scatool:z --entrypoint=/bin/bash scatool:latest`
+```
+podman run -it -v scavol:/var/scatool:z --entrypoint=/bin/bash scatool:latest
+```
 
 # How to Update the Container
 1. Login as **scawork**
-2. > `podman pull registry.opensuse.org/home/jrecord/branches/opensuse/templates/images/tumbleweed/containers/scatool:latest`
-3. > `systemctl --user restart container-scamonitor.service` # If running Option A.
-
+   1. Pull the latest scatool container image
+   2. Restart the container service if running Option A.
+```
+podman pull registry.opensuse.org/home/jrecord/branches/opensuse/templates/images/tumbleweed/containers/scatool:latest
+systemctl --user restart container-scamonitor.service
+```
