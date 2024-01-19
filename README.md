@@ -23,6 +23,7 @@ A rootless podman container to analyze SLES11, SLES12, SLES15 and ALP1 supportco
    2. Assign scawork a password
    3. Configure supportconfig to gather podman information from scawork
    4. Configure unified cgroups on boot
+
 ```
 useradd -m scawork
 echo "scawork:<password>" | chpasswd
