@@ -31,21 +31,35 @@ echo 'LOCAL_PODMAN_USERS=scawork' >> /etc/supportutils/supportconfig.conf
 sed -i -e 's/GRUB_CMDLINE_LINUX_DEFAULT="/GRUB_CMDLINE_LINUX_DEFAULT="systemd.unified_cgroup_hierarchy=1 /g' /etc/default/grub
 ```
 
-1.5   **On ALP1**
-1.5.1 `transactional-update run grub2-mkconfig -o /boot/grub2/grub.cfg`
+2. **On ALP1**
+   1. Update grub.cfg
+> `transactional-update run grub2-mkconfig -o /boot/grub2/grub.cfg`
 
-1.6   **On SLES15**
-1.6.1 `setfacl -m u:scawork:r /etc/zypp/credentials.d/*`
-1.6.2 `sed -i -e 's/systemd-journal:x:\(.*\):/systemd-journal:x:\1:scawork/g' /etc/group`
-1.6.3 `grub2-mkconfig -o /boot/grub2/grub.cfg`
+3. **On SLES15**
+   1. Give scawork access to zypper credentials
+   2. Add scawork to the systemd-journal group so it can see the container logs
+   3. Update grub.cfg
 
-1.7   reboot
+```
+setfacl -m u:scawork:r /etc/zypp/credentials.d/*
+sed -i -e 's/systemd-journal:x:\(.*\):/systemd-journal:x:\1:scawork/g' /etc/group
+grub2-mkconfig -o /boot/grub2/grub.cfg
+```
 
-2.    Login as **scawork**:
-2.1   > sudo loginctl enable-linger scawork
-2.2   > sudo ln -sf ~/.local/share/containers/storage/volumes/scavol/_data /var/scatool
-2.3   > podman volume create scavol
-2.4   > podman pull registry.opensuse.org/home/jrecord/branches/opensuse/templates/images/tumbleweed/containers/scatool:latest
+4. reboot
+
+5. Login as **scawork**:
+   1. Enable linger for scawork
+   2. Create a symlink to the container's working directory
+   3. Create the podman volume for the container
+   4. Pull the current scatool container image
+
+```
+sudo loginctl enable-linger scawork
+sudo ln -sf ~/.local/share/containers/storage/volumes/scavol/_data /var/scatool
+podman volume create scavol
+podman pull registry.opensuse.org/home/jrecord/branches/opensuse/templates/images/tumbleweed/containers/scatool:latest
+```
 
 # Options for Running the Container
 
