@@ -19,10 +19,16 @@ A rootless podman container to analyze SLES11, SLES12, SLES15 and ALP1 supportco
 # Configuration
 
 1. Login as **root**:
-   1. `useradd -m scawork`
-   1. `passwd scawork`
-   1. `echo 'LOCAL_PODMAN_USERS=scawork' >> /etc/supportutils/supportconfig.conf`
-   1. `sed -i -e 's/GRUB_CMDLINE_LINUX_DEFAULT="/GRUB_CMDLINE_LINUX_DEFAULT="systemd.unified_cgroup_hierarchy=1 /g' /etc/default/grub`
+   1. Add the scawork user
+   2. Assign scawork a password
+   3. Configure supportconfig to gather podman information from scawork
+   4. Configure unified cgroups on boot
+```
+useradd -m scawork
+echo "scawork:<password>" | chpasswd
+echo 'LOCAL_PODMAN_USERS=scawork' >> /etc/supportutils/supportconfig.conf
+sed -i -e 's/GRUB_CMDLINE_LINUX_DEFAULT="/GRUB_CMDLINE_LINUX_DEFAULT="systemd.unified_cgroup_hierarchy=1 /g' /etc/default/grub
+```
 
 1.5   **On ALP1**
 1.5.1 `transactional-update run grub2-mkconfig -o /boot/grub2/grub.cfg`
