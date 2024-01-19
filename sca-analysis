@@ -1,0 +1,77 @@
+#!/bin/bash
+# Version:  1.3.19
+# Modified: 2024 Jan 19
+
+BASE="/var/scatool"
+INDIR="${BASE}/incoming"
+OUTDIR="${BASE}/reports"
+LOGDIR="${BASE}/logs"
+DATEFMT='"+%F %T.%N %z %Z"'
+LOG="${LOGDIR}/sca-analysis-$(date +%Y%m%d-%H%M%S)"
+ACTIVE_FILE="${LOGDIR}/.sca-analysis.pid"
+
+sca_log() {
+    local TYPE="$1"; shift
+    printf "%s [%s] sca-analysis: %s\n" "$(date ${DATEFMT})" "$TYPE" "$*"
+}
+
+sca_note() {
+    sca_log Note "$@"
+}
+
+sca_warn() {
+    sca_log Warn "$@" >&2
+}
+
+sca_error() {
+    sca_log ERROR "$@" >&2
+}
+
+clean_up() {
+	rm -f $ACTIVE_FILE
+}
+
+
+if ! [[ -d ${BASE} ]]; then
+	sca_error "Directory not found - ${BASE}"
+elif [[ -e $ACTIVE_FILE ]]; then
+	sca_warn "sca-analysis currently active: $ACTIVE_FILE"
+else
+	echo $$ >> $ACTIVE_FILE
+	FILES=$(ls -1 ${INDIR}/)
+	if [[ -z $FILES ]]; then
+		sca_error "Missing supportconfig files - ${INDIR}"
+	else
+		for filepath in ${INDIR}/*
+		do
+			sca_note "Processing $filepath"
+			if [[ ! -r $filepath ]]; then
+				sca_error "Cannot read file, try 'chmod 644 ${filepath}'"
+			else
+				ACTIVE="${filepath}_active"
+				if [[ -e $ACTIVE ]]; then
+					sca_warn "Supportconfig Analysis in Progress - $filepath"
+				else
+					ACCESS_TEST=$(tar --test-label -f ${filepath} 2>&1)
+					if (( $? )); then
+						sca_error "Test failed: ${ACCESS_TEST}"
+					else
+						touch $ACTIVE
+						BASE_NAME="${filepath##*/}"
+						LOG="${LOGDIR}/sca-analysis-${BASE_NAME%%.*}"
+						scatool -t all -l3 -b -r -o ${OUTDIR} $filepath &> $LOG
+						BASE=${filepath%.*}
+						rm -rf $filepath $ACTIVE
+						[[ -e $BASE ]] && rm -rf $BASE
+						grep "SCA Report File" $LOG | while IFS= read -r LINE
+						do
+							sca_note "SCA Report File ${LINE##* }"
+						done
+					fi
+				fi
+			fi
+		done
+	fi
+	clean_up
+fi
+
