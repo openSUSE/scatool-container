@@ -111,7 +111,7 @@ podman logs scamonitor
 ## Option B) Running the Container as Needed:
 1.  Follow the Configuration steps above
 2.  Login as **scawork**
-3   Run the container to initialize the volume
+3.  Run the container to initialize the volume
 ```
 podman run -d --rm -v scavol:/var/scatool:z scatool:latest
 ```
@@ -132,7 +132,6 @@ ls -l /var/scatool/reports
 9.  Repeat steps 5-8 for any new additional supportconfigs to analyze
 
 # Running the Container with a Shell
-
 ```
 podman run -it -v scavol:/var/scatool:z --entrypoint=/bin/bash scatool:latest
 ```
