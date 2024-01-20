@@ -52,13 +52,13 @@ grub2-mkconfig -o /boot/grub2/grub.cfg
 
 5. Login as **scawork**:
    1. Enable linger for scawork
-   2. Create a symlink to the container's working directory
-   3. Create the podman volume for the container
-   4. Pull the current scatool container image
+   2. Create the podman volume for the container
+   3. Create a symlink to the container's working directory
+   5. Pull the current scatool container image
 ```
 sudo loginctl enable-linger scawork
-sudo ln -sf ~/.local/share/containers/storage/volumes/scavol/_data /var/scatool
 podman volume create scavol
+sudo ln -sf ~/.local/share/containers/storage/volumes/scavol/_data /var/scatool
 podman pull registry.opensuse.org/home/jrecord/branches/opensuse/templates/images/tumbleweed/containers/suse/alp/workloads/scatool:latest
 ```
 
