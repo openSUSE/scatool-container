@@ -69,9 +69,9 @@ podman pull registry.opensuse.org/home/jrecord/branches/opensuse/templates/image
 2.  Login as **scawork**
     1. Start the scatool container in monitoring mode
     2. Create the user's SystemD unit directory
-    3. Generate a container SystemD user unit file called container-scamonitor.service
+    3. Generate a container SystemD user unit file called `container-scamonitor.service`
     4. Reload systemd
-    5. Enable container-scamonitor.service
+    5. Enable `container-scamonitor.service`
 ```
 podman run -dt -v scavol:/var/scatool:z -e MONITORING=1 --name scamonitor scatool:latest
 mkdir -p ~/.config/systemd/user
@@ -80,7 +80,7 @@ systemctl --user daemon-reload
 systemctl --user enable container-scamonitor.service
 ```
 > [!TIP]
-> Reboot the server to confirm the container-scamonitor.service will start as expected
+> Reboot the server to confirm the `container-scamonitor.service` will start as expected
 3.  Reboot
 4.  Login as **scawork**
 5.  Check the container's status
