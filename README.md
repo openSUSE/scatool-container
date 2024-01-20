@@ -79,6 +79,8 @@ podman generate systemd --new --name scamonitor > ~/.config/systemd/user/contain
 systemctl --user daemon-reload
 systemctl --user enable container-scamonitor.service
 ```
+> [!TIP]
+> Reboot the server to confirm the container-scamonitor.service will start as expected
 3.  Reboot
 4.  Login as **scawork**
 5.  Check the container's status
