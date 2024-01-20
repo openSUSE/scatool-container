@@ -1,6 +1,6 @@
 #!/bin/bash
-# Version:  1.0.5
-# Modified: 2024 Jan 19
+# Version:  1.0.6
+# Modified: 2024 Jan 20
 
 VOLDIR="/var/scatool"
 INCOMING="${VOLDIR}/incoming"
@@ -8,7 +8,7 @@ REPORTS="${VOLDIR}/reports"
 LOGS="${VOLDIR}/logs"
 ACTIVE_FILE="${LOGS}/.sca-analysis.pid" # Must match sca-analysis active file
 MONITOR_LIVE="${LOGS}/.sca-monitoring-live.pid"
-DATEFMT='"+%F %T.%N %z %Z"'
+DATEFMT="%F %T.%N %z %Z"
 REPORTS_NEW=0
 REPORTS_BEFORE=0
 REPORTS_AFTER=0
@@ -17,7 +17,7 @@ trap clean_up SIGTERM
 
 sca_log() {
     local TYPE="$1"; shift
-    printf "%s [%s] Entrypoint:   %s\n" "$(date ${DATEFMT})" "$TYPE" "$*"
+    printf "%s [%s] Entrypoint:   %s\n" "$(date "+${DATEFMT}")" "$TYPE" "$*"
 }
 
 sca_note() {
@@ -49,7 +49,10 @@ process_reports() {
 }
 
 sca_note "Supportconfig analysis workload container starting"
-sca_note "Monitoring interval: ${INTERVAL:=5} sec"
+sca_note "Package versions:"
+rpm -qa | grep '^sca-'
+echo
+sca_note "SCA Tool patterns:"
 scatool -p
 echo
 if [[ -d $VOLDIR ]]; then
@@ -75,8 +78,9 @@ fi
 
 if (( ${MONITORING:=0} )); then
 	sca_log "Mode" "Monitoring ${INCOMING}"
+    sca_note "Monitoring interval: ${INTERVAL:=5} sec"
 else
-	sca_log "Mode" "Single check ${INCOMING}"
+	sca_log "Mode" "One-shot ${INCOMING}"
 fi
 
 if (( $MONITORING )); then
