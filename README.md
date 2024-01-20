@@ -54,7 +54,7 @@ grub2-mkconfig -o /boot/grub2/grub.cfg
 sudo loginctl enable-linger scawork
 sudo ln -sf ~/.local/share/containers/storage/volumes/scavol/_data /var/scatool
 podman volume create scavol
-podman pull registry.opensuse.org/home/jrecord/branches/opensuse/templates/images/tumbleweed/containers/scatool:latest
+podman pull registry.opensuse.org/home/jrecord/branches/opensuse/templates/images/tumbleweed/containers/suse/alp/workloads/scatool:latest
 ```
 
 # Options for Running the Container
@@ -135,6 +135,6 @@ podman run -it -v scavol:/var/scatool:z --entrypoint=/bin/bash scatool:latest
    1. Pull the latest scatool container image
    2. Restart the container service if running Option A.
 ```
-podman pull registry.opensuse.org/home/jrecord/branches/opensuse/templates/images/tumbleweed/containers/scatool:latest
+podman pull registry.opensuse.org/home/jrecord/branches/opensuse/templates/images/tumbleweed/containers/suse/alp/workloads/scatool:latest
 systemctl --user restart container-scamonitor.service
 ```
