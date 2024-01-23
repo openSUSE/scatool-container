@@ -18,20 +18,20 @@ A rootless podman container to analyze SLES11, SLES12, SLES15 and ALP1 supportco
 
 # How to Analyze Supportconfigs
 1. Run supportconfigs on the servers you wish to analyze
-2. Copy the supportconfigs to the SCA Tool Container's incoming directory
+2. Copy the supportconfigs to the SCA Tool Container's `${HOME}/scatool/incoming` directory
 ```
 scp /var/log/scc_*txz scawork@<your_host>:~/scatool/incoming
 ```
 3. Login as **scawork**
 4. Supportconfigs are created with 600 permissions by default. Change the permissions so the supportconfigs in the incoming directory can be read by the SCA Tool Container.
 5. Check on the supportconig analysis status
-6. Look in the ${HOME}/scatool/reports directory for SCA Report files in HTML and JSON formats
+6. Look in the `${HOME}/scatool/reports` directory for SCA Report files in HTML and JSON formats
 ```
 sudo chmod 644 ${HOME}/scatool/incoming/*
 podman logs scamonitor
 ls -l ${HOME}/scatool/reports
 ```
-7. Each supportconfig will have a corresponding analysis file in the ${HOME}/scatool/logs directory
+7. Each supportconfig will have a corresponding analysis file in the `${HOME}/scatool/logs` directory
 
 # Installation and Configuration for User SystemD Container on ALP1
 1. Install SUSE ALP with podman
