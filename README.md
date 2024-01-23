@@ -63,7 +63,7 @@ transactional-update run grub2-mkconfig -o /boot/grub2/grub.cfg
    6. Check the status of `scamonitor.service`
 
 > [!NOTE]
-> The `scamonitor.service` will pull the `scatool:lastest` image if not found. You can manually pull the image with:
+> The `scamonitor.service` will pull the `scatool:latest` image if not found. You can manually pull the image with:
 > `podman pull registry.opensuse.org/home/jrecord/branches/opensuse/templates/images/tumbleweed/containers/suse/alp/workloads/scatool:latest`
 
 ```
@@ -121,7 +121,7 @@ grub2-mkconfig -o /boot/grub2/grub.cfg
    6. Check the status of `scamonitor.service`
 
 > [!NOTE]
-> The `scamonitor.service` will pull the `scatool:lastest` image if not found. You can manually pull the image with:
+> The `scamonitor.service` will pull the `scatool:latest` image if not found. You can manually pull the image with:
 > `podman pull registry.opensuse.org/home/jrecord/branches/opensuse/templates/images/tumbleweed/containers/suse/alp/workloads/scatool:latest`
 
 ```
