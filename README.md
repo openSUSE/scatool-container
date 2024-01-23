@@ -115,7 +115,7 @@ grub2-mkconfig -o /boot/grub2/grub.cfg
 4. Login as **scawork**:
    1. Create a symlink to the container's working directory
    2. Create the podman quadlet directory
-   3. Install the `scamonitor.container` quadlet file
+   3. Install the [scamonitor.container](https://github.com/openSUSE/scatool-container/blob/1219101-quadlet/scamonitor.container) quadlet file
    4. Restart user SystemD
    5. Start the `scamonitor.service`
 
