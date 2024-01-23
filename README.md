@@ -23,7 +23,7 @@ A rootless podman container to analyze SLES11, SLES12, SLES15 and ALP1 supportco
 scp /var/log/scc_*txz scawork@<your_host>:~/scatool/incoming
 ```
 3. Login as **scawork**
-4. Supportconfigs are created with 600 permissions by default. Change the permissions so the supportconfigs in the incoming directory can be read by the SCA Tool Container.
+4. Supportconfigs are created with 600 permissions by default. Change the permissions so the SCA Tool Container can read the the supportconfigs files.
 5. Check on the supportconig analysis status
 6. Look in the `${HOME}/scatool/reports` directory for SCA Report files in HTML and JSON formats
 ```
