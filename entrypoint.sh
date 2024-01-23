@@ -1,6 +1,6 @@
 #!/bin/bash
-# Version:  1.0.6
-# Modified: 2024 Jan 20
+# Version:  1.0.7
+# Modified: 2024 Jan 23
 
 VOLDIR="/var/scatool"
 INCOMING="${VOLDIR}/incoming"
@@ -62,11 +62,11 @@ if [[ -d $VOLDIR ]]; then
 		if [[ -d $DIR ]]; then
 			MODE=$(stat -c %a $DIR 2>/dev/null)
 			if [[ "$MODE" != "777" ]]; then
-				sca_warn "Setting correct permissions for: $DIR"
+				sca_warn "Set correct permissions on: $DIR"
 				chmod 777 $DIR
 			fi
 		else
-			sca_warn "Creating missing directory: $DIR"
+			sca_warn "Create missing directory: $DIR"
 			mkdir -p $DIR && chmod 777 $DIR
 		fi
 	done
@@ -86,7 +86,7 @@ fi
 if (( $MONITORING )); then
     if [[ -e $MONITOR_LIVE ]]; then
 			sca_error "Another container is already monitoring - ${MONITOR_LIVE}"
-			sca_error "Try: podman ps shows no running container, then try: 'rm ${MONITOR_LIVE}' and restart"
+			sca_error "Try: If 'podman ps' shows no running container, then try: 'rm ${MONITOR_LIVE}' and restart"
 			sca_error "Terminating"
 			exit 5
     else
@@ -105,7 +105,7 @@ if (( $MONITORING )); then
 else
     if [[ -e $MONITOR_LIVE ]]; then
 		sca_error "Another container is monitoring - ${MONITOR_LIVE}"
-		sca_error "Try: 'podman ps' shows no running container, then try: 'rm ${MONITOR_LIVE}' and restart"
+		sca_error "Try: If 'podman ps' shows no running container, then try: 'rm ${MONITOR_LIVE}' and restart"
 		sca_error "Terminating"
 		exit 5
     else
