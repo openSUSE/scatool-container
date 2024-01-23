@@ -14,7 +14,7 @@ A rootless podman container to analyze SLES11, SLES12, SLES15 and ALP1 supportco
 * `podman pull registry.opensuse.org/home/jrecord/branches/opensuse/templates/images/tumbleweed/containers/suse/alp/workloads/scatool:latest`
 
 > [!NOTE]
-> All instructions assume you will be running the SCA Tool Container as a user SystemD process. If you do not intend to run it under SystemD, but only on an as-needed basis, skip to [Use the SCA Tool Container as Needed] below.
+> All instructions assume you will be running the SCA Tool Container as a user SystemD process. If you do not intend to run it under SystemD, but only on an as-needed basis, skip to [Use the SCA Tool Container as Needed](#use-the-sca-tool-container-as-needed) below.
 
 Use the SCA Tool Container as Needed
 # How to Analyze Supportconfigs
