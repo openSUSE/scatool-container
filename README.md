@@ -14,7 +14,7 @@ A rootless podman container to analyze SLES11, SLES12, SLES15 and ALP1 supportco
 * `podman pull registry.opensuse.org/home/jrecord/branches/opensuse/templates/images/tumbleweed/containers/suse/alp/workloads/scatool:latest`
 
 > [!NOTE]
-> All instructions assume you will be running the SCA Tool Container as a user SystemD process. If you do not intend to run it under SystemD, but only on an as-needed basis, skip to [Use the SCA Tool Container as Needed](#use-the-sca-tool-container-as-needed) below.
+> All instructions assume you will be running the SCA Tool Container as a user SystemD process. If you do not intend to run it under SystemD, but only on an as-needed basis, skip to [How to Use the SCA Tool Container as Needed](#how-to-use-the-sca-tool-container-as-needed) below.
 
 # How to Analyze Supportconfigs
 1. Run supportconfigs on the servers you wish to analyze
@@ -75,9 +75,9 @@ systemctl --user start scamonitor.service
 systemctl --user status scamonitor.service
 ```
 4. Reboot the server
-   1. Login as **scawork**:
-   2. Check for cgroup version 2
-   3. Check the scamonitor.service status
+5. Login as **scawork**:
+6. Check for cgroup version 2
+7. Check the `scamonitor.service` status
 ```
 podman info | grep cgroupVersion
   cgroupVersion: v2
@@ -92,7 +92,7 @@ systemctl --user show -p SubState -p ActiveState scamonitor
 2. Install podman from the Containers Module
 
 > [!NOTE]
-> The container can run as any non-root user. However, I will create a user, scawork, dedicated to analyzing supportconfigs.
+> The container can run as any non-root user. However, I will create a user, **scawork**, dedicated to analyzing supportconfigs.
 
 3. Login as **root**:
    1. Add the scawork user
@@ -120,7 +120,7 @@ grub2-mkconfig -o /boot/grub2/grub.cfg
    5. Start the `scamonitor.service`
 
 > [!NOTE]
-> The scamonitor.service will pull the scatool:lastest image if not found. You can manually pull the image with:
+> The `scamonitor.service` will pull the `scatool:lastest` image if not found. You can manually pull the image with:
 > `podman pull registry.opensuse.org/home/jrecord/branches/opensuse/templates/images/tumbleweed/containers/suse/alp/workloads/scatool:latest`
 
    6. Check the status of `scamonitor.service`
@@ -133,9 +133,9 @@ systemctl --user start scamonitor.service
 systemctl --user status scamonitor.service
 ```
 5. Reboot the server
-   1. Login as **scawork**:
-   2. Check for cgroup version 2
-   3. Check the scamonitor.service status
+6. Login as **scawork**:
+7. Check for cgroup version 2
+8. Check the `scamonitor.service` status
 ```
 podman info | grep cgroupVersion
   cgroupVersion: v2
@@ -153,7 +153,7 @@ podman pull registry.opensuse.org/home/jrecord/branches/opensuse/templates/image
 systemtl --user restart scamonitor.service
 ```
 
-# Use the SCA Tool Container as Needed
+# How to Use the SCA Tool Container as Needed
 1. Login as **scawork**
 2. Pull the SCA Tool Container
 3. Run the container to initialize the volume
