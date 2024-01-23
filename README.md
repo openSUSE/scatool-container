@@ -22,7 +22,6 @@ Use the SCA Tool Container as Needed
 2. Copy the supportconfigs to the SCA Tool Container's incoming directory
 ```
 scp /var/log/scc_*txz scawork@<your_host>:~/scatool/incoming
-chmod 644 ${HOME}/scatool/incoming/*
 ```
 3. Login as **scawork**
 4. Supportconfigs are created with 600 permissions by default. Change the permissions so the supportconfigs in the incoming directory can be read by the SCA Tool Container.
