@@ -1,0 +1,21 @@
+# Podman Quadlet File
+[Unit]
+Description=SCA Tool Container
+Wants=network-online.target
+After=network-online.target
+
+[Container]
+Image=registry.opensuse.org/home/jrecord/branches/opensuse/templates/images/tumbleweed/containers/suse/alp/workloads/scatool:latest
+Environment=MONITORING=1
+Environment=NAME_ID=container-scamonitor
+Volume=scavol:/var/scatool
+ContainerName=scamonitor
+Pull=missing
+
+[Service]
+Restart=on-failure
+TimeoutStartSec=300
+
+[Install]
+WantedBy=default.target
+
