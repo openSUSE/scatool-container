@@ -60,11 +60,9 @@ transactional-update run grub2-mkconfig -o /boot/grub2/grub.cfg
    3. Install the [scamonitor.container](https://github.com/openSUSE/scatool-container/blob/1219101-quadlet/scamonitor.container) quadlet file
    4. Restart user SystemD
    5. Start the `scamonitor.service`
-
 > [!NOTE]
 > The `scamonitor.service` will pull the `scatool:lastest` image if not found. You can manually pull the image with:
 > `podman pull registry.opensuse.org/home/jrecord/branches/opensuse/templates/images/tumbleweed/containers/suse/alp/workloads/scatool:latest`
-
    6. Check the status of `scamonitor.service`
 ```
 ln -sf ${HOME}/.local/share/containers/storage/volumes/scavol/_data ${HOME}/scatool
