@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Tue Jan 23 22:27:38 UTC 2024 - jason.record@suse.com
+
+- Moved to podman quadlet container file (bsc#1219101)
+
+-------------------------------------------------------------------
 Sat Jan 20 15:59:40 UTC 2024 - jason.record@suse.com
 
 - Fixed date format (bsc#1219030)
