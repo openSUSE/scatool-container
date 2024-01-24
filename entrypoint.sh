@@ -1,6 +1,6 @@
 #!/bin/bash
-# Version:  1.0.7
-# Modified: 2024 Jan 23
+# Version:  1.0.8
+# Modified: 2024 Jan 24
 
 VOLDIR="/var/scatool"
 INCOMING="${VOLDIR}/incoming"
@@ -12,6 +12,7 @@ DATEFMT="%F %T.%N %z %Z"
 REPORTS_NEW=0
 REPORTS_BEFORE=0
 REPORTS_AFTER=0
+MONITORING_ID_CONFIRMED="ce4ebd84-bb19-4d42-a077-870ca0ad024d"
 
 trap clean_up SIGTERM
 
@@ -35,7 +36,7 @@ sca_error() {
 clean_up() {
 	sca_note "Shutting down"
 	rm -f $ACTIVE_FILE $MONITOR_LIVE
-	exit
+	exit 0
 }
 
 process_reports() {
@@ -46,6 +47,27 @@ process_reports() {
 	REPORTS_NEW=$(( REPORTS_AFTER - REPORTS_BEFORE ))
 	sca_note "Processing complete, ${REPORTS}"
 	sca_note "New SCA Reports: ${REPORTS_NEW}"
+}
+
+abort_monitoring() {
+	sca_error "Another container is already monitoring - ${MONITOR_LIVE}"
+	sca_error "Try: If 'podman ps' shows no running container, then try: 'rm ${MONITOR_LIVE}' and restart"
+	sca_error "Terminating"
+	exit 5
+}
+
+start_monitoring() {
+	while :
+	do
+		if [[ -e $ACTIVE_FILE ]]; then
+			sca_note "Analysis in progress"
+		else
+			echo $$ > $MONITOR_LIVE
+			FILES=$(ls -1 ${INCOMING})
+			[[ -n $FILES ]] && process_reports
+		fi
+		sleep ${INTERVAL}
+	done
 }
 
 sca_note "Supportconfig analysis workload container starting"
@@ -83,31 +105,19 @@ else
 	sca_log "Mode" "One-shot ${INCOMING}"
 fi
 
-if (( $MONITORING )); then
-    if [[ -e $MONITOR_LIVE ]]; then
-			sca_error "Another container is already monitoring - ${MONITOR_LIVE}"
-			sca_error "Try: If 'podman ps' shows no running container, then try: 'rm ${MONITOR_LIVE}' and restart"
-			sca_error "Terminating"
-			exit 5
+if (( $MONITORING )); then # Monitoring Mode
+	if [[ "${MONITORING_ID:=''}" == "${MONITORING_ID_CONFIRMED}" ]]; then
+		start_monitoring
     else
-		while :
-		do
-			if [[ -e $ACTIVE_FILE ]]; then
-				sca_note "Analysis in progress"
-			else
-				echo $$ > $MONITOR_LIVE
-				FILES=$(ls -1 ${INCOMING})
-				[[ -n $FILES ]] && process_reports
-			fi
-			sleep ${INTERVAL}
-		done
+	    if [[ -e $MONITOR_LIVE ]]; then
+	    	abort_monitoring
+		else
+			start_monitoring
+		fi
 	fi
-else
+else # One-shot Mode
     if [[ -e $MONITOR_LIVE ]]; then
-		sca_error "Another container is monitoring - ${MONITOR_LIVE}"
-		sca_error "Try: If 'podman ps' shows no running container, then try: 'rm ${MONITOR_LIVE}' and restart"
-		sca_error "Terminating"
-		exit 5
+    	abort_monitoring
     else
 		FILES=$(ls -1 ${INCOMING})
 		[[ -n $FILES ]] && process_reports || sca_note "No files found to analyze"

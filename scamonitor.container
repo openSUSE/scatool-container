@@ -7,7 +7,7 @@ After=network-online.target
 [Container]
 Image=registry.opensuse.org/home/jrecord/branches/opensuse/templates/images/tumbleweed/containers/suse/alp/workloads/scatool:latest
 Environment=MONITORING=1
-Environment=NAME_ID=container-scamonitor
+Environment=MONITORING_ID=ce4ebd84-bb19-4d42-a077-870ca0ad024d
 Volume=scavol:/var/scatool
 ContainerName=scamonitor
 
