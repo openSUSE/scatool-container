@@ -10,7 +10,6 @@ Environment=MONITORING=1
 Environment=NAME_ID=container-scamonitor
 Volume=scavol:/var/scatool
 ContainerName=scamonitor
-Pull=missing
 
 [Service]
 Restart=on-failure
