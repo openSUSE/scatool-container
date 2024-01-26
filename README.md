@@ -183,14 +183,6 @@ podman info | grep cgroupVersion
 systemctl --user status scamonitor
 ```
 
-# How to Update the SCA Tool Container
-1. Pull the new image
-2. Restart the `scamonitor.service` or re-run the SCA Tool Container as needed
-```
-podman pull registry.opensuse.org/home/jrecord/branches/opensuse/templates/images/tumbleweed/containers/suse/alp/workloads/scatool:latest
-systemtl --user restart scamonitor.service
-```
-
 # How to Use the SCA Tool Container as Needed
 1. Login as **scawork**
 2. Pull the SCA Tool Container now and each time you want to update the container
@@ -218,3 +210,132 @@ podman logs sca
 ls -l ${HOME}/scatool/reports
 ```
 
+# How to Update the SCA Tool Container
+1. Pull the new image
+2. Restart the `scamonitor.service` or re-run the SCA Tool Container as needed
+```
+podman pull registry.opensuse.org/home/jrecord/branches/opensuse/templates/images/tumbleweed/containers/suse/alp/workloads/scatool:latest
+systemtl --user restart scamonitor.service
+```
+
+# Troubleshooting Issues
+## The SystemD Unit is not created from the quadlet file
+1. Login as **scawork**
+2. Make sure the `${HOME}/.config/containers/systemd/scamonitor.container` file is present
+```
+\> ls -l ${HOME}/.config/containers/systemd/scamonitor.container
+-rw-r--r--. 1 scawork users 497 Jan 26 10:18 /home/scawork/.config/containers/systemd/scamonitor.container
+```
+3. Run `/usr/lib/systemd/system-generators/podman-system-generator --user --dryrun`. Observe any errors and correct them. Repeat the command until it displays a valid systemd unit file like this:
+```
+\> /usr/lib/systemd/system-generators/podman-system-generator --user --dryrun
+quadlet-generator[1503]: Loading source unit file /home/scawork/.config/containers/systemd/scamonitor.container
+---scamonitor.service---
+# Podman Quadlet Container File
+[Unit]
+Description=SCA Tool Container
+Wants=network-online.target
+After=network-online.target
+SourcePath=/home/scawork/.config/containers/systemd/scamonitor.container
+RequiresMountsFor=%t/containers
+
+[X-Container]
+Image=registry.opensuse.org/home/jrecord/branches/opensuse/templates/images/tumbleweed/containers/suse/alp/workloads/scatool:latest
+Environment=MONITORING=1
+Environment=MONITORING_ID=ce4ebd84-bb19-4d42-a077-870ca0ad024d
+Volume=scavol:/var/scatool
+ContainerName=scamonitor
+
+[Service]
+Restart=on-failure
+TimeoutStartSec=300
+Environment=PODMAN_SYSTEMD_UNIT=%n
+KillMode=mixed
+ExecStop=/usr/bin/podman rm -f -i --cidfile=%t/%N.cid
+ExecStopPost=-/usr/bin/podman rm -f -i --cidfile=%t/%N.cid
+Delegate=yes
+Type=notify
+NotifyAccess=all
+SyslogIdentifier=%N
+ExecStart=/usr/bin/podman run --name=scamonitor --cidfile=%t/%N.cid --replace --rm --cgroups=split --sdnotify=conmon -d -v scavol:/var/scatool --env MONITORING=1 --env MONITORING_ID=ce4ebd84-bb19-4d42-a077-870ca0ad024d registry.opensuse.org/home/jrecord/branches/opensuse/templates/images/tumbleweed/containers/suse/alp/workloads/scatool:latest
+
+[Install]
+WantedBy=default.target
+```
+
+## The SCA Tool Container image is missing
+1. Login as **scawork**
+2. Run `podman images` to confirm the container image is missing
+```
+> podman images
+REPOSITORY  TAG         IMAGE ID    CREATED     SIZE
+```
+3. Run `systemctl --user status scamonitor.service` to check the status
+```
+\> systemctl --user status scamonitor
+● scamonitor.service - SCA Tool Container
+     Loaded: loaded (/home/scawork/.config/containers/systemd/scamonitor.container; generated)
+     Active: activating (start) since Fri 2024-01-26 10:22:53 UTC; 42s ago
+   Main PID: 1014 (podman)
+      Tasks: 18 (limit: 4667)
+     Memory: 86.1M
+        CPU: 154ms
+     CGroup: /user.slice/user-1000.slice/user@1000.service/app.slice/scamonitor.service
+             ├─ 1014 /usr/bin/podman run --name=scamonitor --cidfile=/run/user/1000/scamonitor.cid --replace --rm --cgroups=split --sdnotify=conmon -d -v scavol:/var/scatool --env MONITORING=1 --env MONITORING_ID=>
+             ├─ 1070 /usr/bin/podman run --name=scamonitor --cidfile=/run/user/1000/scamonitor.cid --replace --rm --cgroups=split --sdnotify=conmon -d -v scavol:/var/scatool --env MONITORING=1 --env MONITORING_ID=>
+             └─ 1075 catatonit -P
+
+Jan 26 10:22:53 localhost.localdomain systemd[917]: Starting SCA Tool Container...
+Jan 26 10:22:53 slem55 podman[1070]: 2024-01-26 10:22:53.360779919 +0000 UTC m=+0.072545099 system refresh
+Jan 26 10:22:53 slem55 scamonitor[1070]: Trying to pull registry.opensuse.org/home/jrecord/branches/opensuse/templates/images/tumbleweed/containers/suse/alp/workloads/scatool:latest...
+Jan 26 10:22:53 slem55 scamonitor[1070]: Pulling image registry.opensuse.org/home/jrecord/branches/opensuse/templates/images/tumbleweed/containers/suse/alp/workloads/scatool:latest inside systemd: setting pull tim>
+Jan 26 10:23:04 slem55 scamonitor[1070]: time="2024-01-26T10:23:04Z" level=warning msg="Failed, retrying in 1s ... (1/3). Error: initializing source docker://registry.opensuse.org/home/jrecord/branches/opensuse/te>
+Jan 26 10:23:15 slem55 scamonitor[1070]: time="2024-01-26T10:23:15Z" level=warning msg="Failed, retrying in 1s ... (2/3). Error: initializing source docker://registry.opensuse.org/home/jrecord/branches/opensuse/te>
+Jan 26 10:23:27 slem55 scamonitor[1070]: time="2024-01-26T10:23:27Z" level=warning msg="Failed, retrying in 1s ... (3/3). Error: initializing source docker://registry.opensuse.org/home/jrecord/branches/opensuse/te>
+```
+4. The `Error: initializing source` usually means the registry is busy or down.
+5. Manually pull the image until it download successfully.
+```
+\> podman pull registry.opensuse.org/home/jrecord/branches/opensuse/templates/images/tumbleweed/containers/suse/alp/workloads/scatool:latest
+Trying to pull registry.opensuse.org/home/jrecord/branches/opensuse/templates/images/tumbleweed/containers/suse/alp/workloads/scatool:latest...
+Getting image source signatures
+Copying blob bb3d399028e9 done   | 
+Copying blob b784dfba2061 done   | 
+Copying config cd2a1d820a done   | 
+Writing manifest to image destination
+cd2a1d820afc1d3654140ecc1f91af076e3681a1d5d9bcbfe1ac7440681c66c3
+```
+6. Once downloaded, start the `scamonitor.service` with `systemctl --user start scamonitor.service`
+```
+\> podman images
+REPOSITORY                                                                                                              TAG         IMAGE ID      CREATED       SIZE
+registry.opensuse.org/home/jrecord/branches/opensuse/templates/images/tumbleweed/containers/suse/alp/workloads/scatool  latest      cd2a1d820afc  36 hours ago  305 MB
+
+\> systemctl --user start scamonitor.service
+\> systemctl --user status scamonitor.service
+● scamonitor.service - SCA Tool Container
+     Loaded: loaded (/home/scawork/.config/containers/systemd/scamonitor.container; generated)
+     Active: active (running) since Fri 2024-01-26 10:37:58 UTC; 3min 12s ago
+   Main PID: 1610 (conmon)
+      Tasks: 4 (limit: 4667)
+     Memory: 15.1M
+        CPU: 1.609s
+     CGroup: /user.slice/user-1000.slice/user@1000.service/app.slice/scamonitor.service
+             ├─libpod-payload-12d9db8a2c1abe7472de6a179b876f0e2e0f7d9f297eaa30dfff614377ca8e03
+             │ ├─ 1620 /bin/bash /usr/local/bin/entrypoint.sh
+             │ └─ 1750 sleep 5
+             └─runtime
+               ├─ 1603 /usr/bin/slirp4netns --disable-host-loopback --mtu=65520 --enable-sandbox --enable-seccomp --enable-ipv6 -c -r 3 -e 4 --netns-type=path /run/user/1000/netns/netns-db274823-5519-fdd8-9536-cf2>
+               └─ 1610 /usr/bin/conmon --api-version 1 -c 12d9db8a2c1abe7472de6a179b876f0e2e0f7d9f297eaa30dfff614377ca8e03 -u 12d9db8a2c1abe7472de6a179b876f0e2e0f7d9f297eaa30dfff614377ca8e03 -r /usr/bin/runc -b /h>
+
+Jan 26 10:37:58 slem55 scamonitor[1610]:          sle15sp4 : 230       
+Jan 26 10:37:58 slem55 scamonitor[1610]:          sle15sp5 : 1         
+Jan 26 10:37:58 slem55 scamonitor[1610]:              8162 : Total Available Patterns
+Jan 26 10:37:58 slem55 scamonitor[1610]: 
+Jan 26 10:37:58 slem55 scamonitor[1610]: 
+Jan 26 10:37:58 slem55 scamonitor[1610]: 2024-01-26 10:37:58.547195913 +0000 UTC [Warn] Entrypoint:   Create missing directory: /var/scatool/incoming
+Jan 26 10:37:58 slem55 scamonitor[1610]: 2024-01-26 10:37:58.548584858 +0000 UTC [Warn] Entrypoint:   Create missing directory: /var/scatool/reports
+Jan 26 10:37:58 slem55 scamonitor[1610]: 2024-01-26 10:37:58.549757927 +0000 UTC [Warn] Entrypoint:   Create missing directory: /var/scatool/logs
+Jan 26 10:37:58 slem55 scamonitor[1610]: 2024-01-26 10:37:58.550906023 +0000 UTC [Mode] Entrypoint:   Monitoring /var/scatool/incoming
+Jan 26 10:37:58 slem55 scamonitor[1610]: 2024-01-26 10:37:58.551342527 +0000 UTC [Note] Entrypoint:   Monitoring interval: 5 sec
+```
