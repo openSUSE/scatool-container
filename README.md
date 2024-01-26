@@ -2,10 +2,20 @@
 
 A rootless podman container to analyze SLES11, SLES12, SLES15 and ALP1 supportconfig tar files placed in the `/var/scatool/incoming` directory. The resulting SCA Report files will be placed in the `/var/scatool/reports` directory in HTML and JSON formats. Log files from the analysis session are placed in `/var/scatool/logs`.
 
+> [!NOTE]
+> The container can run as any non-root user. However, a user will be created, **scawork**, dedicated to analyzing supportconfigs.
+
 ## Directories
 * `/var/scatool/incoming` to `${HOME}/scatool/incoming` - Supportconfig tarball files you want analyzed
 * `/var/scatool/reports` to `${HOME}/scatool/reports` - SCA Report files in both HTML and JSON formats
 * `/var/scatool/logs` to `${HOME}/scatool/logs` - scatool logs and shared files
+
+## Index to Sections
+* [Rootless SystemD Service on ALP1](#installation-and-configuration-for-user-systemd-container-on-alp1)
+* [Rootless SystemD Service on SLES 15 SP5](#installation-and-configuration-for-user-systemd-container-on-sles-15-sp5)
+* [Rootless SystemD Service on SLE Micro 5.5](#installation-and-configuration-for-user-systemd-container-on-sle-micro-5.5)
+* [Rootless Container as Needed on Any](#how-to-use-the-sca-tool-container-as-needed)
+* [How to Update the SCA Tool Container](#how-to-update-the-sca-tool-container)
 
 ## Projects
 * Upstream Source: https://github.com/openSUSE/scatool-container
@@ -35,10 +45,6 @@ ls -l ${HOME}/scatool/reports
 
 # Installation and Configuration for User SystemD Container on ALP1
 1. Install SUSE ALP with podman
-
-> [!NOTE]
-> The container can run as any non-root user. However, I will create a user, **scawork**, dedicated to analyzing supportconfigs.
-
 2. Login as **root**:
    1. Add the scawork user
    2. Assign scawork a password
@@ -50,7 +56,7 @@ ls -l ${HOME}/scatool/reports
 useradd -m scawork
 echo 'scawork:<password>' | chpasswd
 loginctl enable-linger scawork
-echo 'LOCAL_PODMAN_USERS=scawork' >> /etc/supportutils/supportconfig.conf
+[[ -d /etc/supportutils ]] && echo 'LOCAL_PODMAN_USERS=scawork' >> /etc/supportutils/supportconfig.conf || echo 'LOCAL_PODMAN_USERS=scawork' >> /etc/supportconfig.conf
 sed -i -e 's/GRUB_CMDLINE_LINUX_DEFAULT="/GRUB_CMDLINE_LINUX_DEFAULT="systemd.unified_cgroup_hierarchy=1 /g' /etc/default/grub
 transactional-update run grub2-mkconfig -o /boot/grub2/grub.cfg
 ```
@@ -58,9 +64,6 @@ transactional-update run grub2-mkconfig -o /boot/grub2/grub.cfg
    1. Create a symlink to the container's working directory
    2. Create the podman quadlet directory
    3. Install the [scamonitor.container](https://github.com/openSUSE/scatool-container/blob/1219101-quadlet/scamonitor.container) quadlet file
-   4. Restart user SystemD
-   5. Start the `scamonitor.service`
-   6. Check the status of `scamonitor.service`
 
 > [!NOTE]
 > The `scamonitor.service` will pull the `scatool:latest` image if not found. You can manually pull the image with:  
@@ -70,44 +73,38 @@ transactional-update run grub2-mkconfig -o /boot/grub2/grub.cfg
 ln -sf ${HOME}/.local/share/containers/storage/volumes/scavol/_data ${HOME}/scatool
 mkdir -p ${HOME}/.config/containers/systemd
 cp scamonitor.container ${HOME}/.config/containers/systemd
-systemctl --user deamon-reload
-systemctl --user start scamonitor.service
-systemctl --user status scamonitor.service
 ```
-4. Reboot the server
+> [!TIP]
+> You can run `/usr/lib/systemd/system-generators/podman-system-generator --user --dryrun` to check if a valid systemd unit will be generated
+
+4. Reboot the server. This will enable unified cgroups and confirm the container service will start at boot time.
 5. Login as **scawork**:
-6. Check for cgroup version 2
-7. Check the `scamonitor.service` status
+   1. Check for cgroup version 2
+   2. Check the `scamonitor.service` status
 ```
 podman info | grep cgroupVersion
   cgroupVersion: v2
 
-systemctl --user show -p SubState -p ActiveState scamonitor
-  ActiveState=active
-  SubState=running
+systemctl --user status scamonitor.service
 ```
 
 # Installation and Configuration for User SystemD Container on SLES 15 SP5
 1. Install SUSE SLES 15 SP5
 2. Install podman from the Containers Module
-
-> [!NOTE]
-> The container can run as any non-root user. However, I will create a user, **scawork**, dedicated to analyzing supportconfigs.
-
 3. Login as **root**:
    1. Add the scawork user
    2. Assign scawork a password
-   3. Configure supportconfig to gather podman information from scawork
-   4. Configure unified cgroups on boot
-   5. Give scawork access to zypper credentials
+   3. Enable linger for scawork
+   4. Configure supportconfig to gather podman information from scawork
+   5. Configure unified cgroups on boot
    6. Add scawork to the systemd-journal group so it can see the container logs
    7. Update grub.cfg
 ```
 useradd -m scawork
 echo 'scawork:<password>' | chpasswd
-echo 'LOCAL_PODMAN_USERS=scawork' >> /etc/supportutils/supportconfig.conf
+loginctl enable-linger scawork
+[[ -d /etc/supportutils ]] && echo 'LOCAL_PODMAN_USERS=scawork' >> /etc/supportutils/supportconfig.conf || echo 'LOCAL_PODMAN_USERS=scawork' >> /etc/supportconfig.conf
 sed -i -e 's/GRUB_CMDLINE_LINUX_DEFAULT="/GRUB_CMDLINE_LINUX_DEFAULT="systemd.unified_cgroup_hierarchy=1 /g' /etc/default/grub
-setfacl -m u:scawork:r /etc/zypp/credentials.d/*
 sed -i -e 's/systemd-journal:x:\(.*\):/systemd-journal:x:\1:scawork/g' /etc/group
 grub2-mkconfig -o /boot/grub2/grub.cfg
 ```
@@ -115,10 +112,8 @@ grub2-mkconfig -o /boot/grub2/grub.cfg
 4. Login as **scawork**:
    1. Create a symlink to the container's working directory
    2. Create the podman quadlet directory
-   3. Install the [scamonitor.container](https://github.com/openSUSE/scatool-container/blob/1219101-quadlet/scamonitor.container) quadlet file
-   4. Restart user SystemD
-   5. Start the `scamonitor.service`
-   6. Check the status of `scamonitor.service`
+   3. Create an empty `${HOME}/.config/containers/mounts.conf` file
+   4. Install the [scamonitor.container](https://github.com/openSUSE/scatool-container/blob/1219101-quadlet/scamonitor.container) quadlet file
 
 > [!NOTE]
 > The `scamonitor.service` will pull the `scatool:latest` image if not found. You can manually pull the image with:  
@@ -127,22 +122,65 @@ grub2-mkconfig -o /boot/grub2/grub.cfg
 ```
 ln -sf ${HOME}/.local/share/containers/storage/volumes/scavol/_data ${HOME}/scatool
 mkdir -p ${HOME}/.config/containers/systemd
+touch ${HOME}/.config/containers/mounts.conf
 cp scamonitor.container ${HOME}/.config/containers/systemd
-systemctl --user daemon-reload
-systemctl --user start scamonitor.service
-systemctl --user status scamonitor.service
 ```
-5. Reboot the server
+5. Reboot the server. This will enable unified cgroups and confirm the container service will start at boot time.
 6. Login as **scawork**:
-7. Check for cgroup version 2
-8. Check the `scamonitor.service` status
+   1. Check for cgroup version 2
+   2. Check the `scamonitor.service` status
 ```
 podman info | grep cgroupVersion
   cgroupVersion: v2
 
-systemctl --user show -p SubState -p ActiveState scamonitor
-  ActiveState=active
-  SubState=running
+systemctl --user status scamonitor
+```
+
+# Installation and Configuration for User SystemD Container on SLE Micro 5.5
+1. Install SUSE SLE Micro 5.5 
+2. Login as **root**:
+   1. Add the scawork user
+   2. Assign scawork a password
+   3. Enable linger for scawork
+   4. Configure supportconfig to gather podman information from scawork
+   5. Configure unified cgroups on boot
+   6. Add scawork to the systemd-journal group so it can see the container logs
+   7. Update grub.cfg
+```
+useradd -m scawork
+echo 'scawork:<password>' | chpasswd
+loginctl enable-linger scawork
+[[ -d /etc/supportutils ]] && echo 'LOCAL_PODMAN_USERS=scawork' >> /etc/supportutils/supportconfig.conf || echo 'LOCAL_PODMAN_USERS=scawork' >> /etc/supportconfig.conf
+sed -i -e 's/GRUB_CMDLINE_LINUX_DEFAULT="/GRUB_CMDLINE_LINUX_DEFAULT="systemd.unified_cgroup_hierarchy=1 /g' /etc/default/grub
+sed -i -e 's/systemd-journal:x:\(.*\):/systemd-journal:x:\1:scawork/g' /etc/group
+transactional-update run grub2-mkconfig -o /boot/grub2/grub.cfg
+```
+
+3. Login as **scawork**:
+   1. Create a symlink to the container's working directory
+   2. Create the podman quadlet directory
+   3. Create an empty `${HOME}/.config/containers/mounts.conf` file
+   4. Install the [scamonitor.container](https://github.com/openSUSE/scatool-container/blob/1219101-quadlet/scamonitor.container) quadlet file
+
+> [!NOTE]
+> The `scamonitor.service` will pull the `scatool:latest` image if not found. You can manually pull the image with:  
+> `podman pull registry.opensuse.org/home/jrecord/branches/opensuse/templates/images/tumbleweed/containers/suse/alp/workloads/scatool:latest`
+
+```
+ln -sf ${HOME}/.local/share/containers/storage/volumes/scavol/_data ${HOME}/scatool
+mkdir -p ${HOME}/.config/containers/systemd
+touch ${HOME}/.config/containers/mounts.conf
+cp scamonitor.container ${HOME}/.config/containers/systemd
+```
+4. Reboot the server. This will enable unified cgroups and confirm the container service will start at boot time.
+5. Login as **scawork**:
+   1. Check for cgroup version 2
+   2. Check the `scamonitor.service` status
+```
+podman info | grep cgroupVersion
+  cgroupVersion: v2
+
+systemctl --user status scamonitor
 ```
 
 # How to Update the SCA Tool Container
@@ -155,7 +193,7 @@ systemtl --user restart scamonitor.service
 
 # How to Use the SCA Tool Container as Needed
 1. Login as **scawork**
-2. Pull the SCA Tool Container
+2. Pull the SCA Tool Container now and each time you want to update the container
 3. Run the container to initialize the volume
 4. Create a symlink to the container's working directory
 ```
@@ -171,16 +209,12 @@ chmod 644 ${HOME}/scatool/incoming/*
 ```
 6. Run the SCA Tool Container to analyze all supportconfigs in the incoming directory
 ```
-podman run -dt --rm -v scavol:/var/scatool:z scatool:latest
+podman run -dt --rm -v scavol:/var/scatool:z --name sca scatool:latest
 ```
 7. Check on the supportconig analysis status
 8. Look in the `${HOME}/scatool/reports` directory for SCA Report files in HTML and JSON formats
 ```
-podman logs scamonitor
+podman logs sca
 ls -l ${HOME}/scatool/reports
-```
-9. To update the container, just pull the new image before running the container again
-```
-podman pull registry.opensuse.org/home/jrecord/branches/opensuse/templates/images/tumbleweed/containers/suse/alp/workloads/scatool:latest
 ```
 
