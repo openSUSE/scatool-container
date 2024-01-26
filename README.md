@@ -299,7 +299,7 @@ Jan 26 10:23:04 slem55 scamonitor[1070]: time="2024-01-26T10:23:04Z" level=warni
 Jan 26 10:23:15 slem55 scamonitor[1070]: time="2024-01-26T10:23:15Z" level=warning msg="Failed, retrying in 1s ... (2/3). Error: initializing source docker://registry.opensuse.org/home/jrecord/branches/opensuse/te>
 Jan 26 10:23:27 slem55 scamonitor[1070]: time="2024-01-26T10:23:27Z" level=warning msg="Failed, retrying in 1s ... (3/3). Error: initializing source docker://registry.opensuse.org/home/jrecord/branches/opensuse/te>
 ```
-4. The `Error: initializing source` usually means the registry is busy or down.
+4. The `Error: initializing source` usually means the registry is busy or down, and the `Active: activating` status means systemd is trying to pull the current SCA Tool Container image from the registry.
 5. Manually pull the image until it downloads successfully.
 ```
 > podman pull registry.opensuse.org/home/jrecord/branches/opensuse/templates/images/tumbleweed/containers/suse/alp/workloads/scatool:latest
