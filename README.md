@@ -224,12 +224,12 @@ systemtl --user restart scamonitor.service
 1. Login as **scawork**
 2. Make sure the `${HOME}/.config/containers/systemd/scamonitor.container` file is present
 ```
-\> ls -l ${HOME}/.config/containers/systemd/scamonitor.container
+> ls -l ${HOME}/.config/containers/systemd/scamonitor.container
 -rw-r--r--. 1 scawork users 497 Jan 26 10:18 /home/scawork/.config/containers/systemd/scamonitor.container
 ```
 3. Run `/usr/lib/systemd/system-generators/podman-system-generator --user --dryrun`. Observe any errors and correct them. Repeat the command until it displays a valid systemd unit file like this:
 ```
-\> /usr/lib/systemd/system-generators/podman-system-generator --user --dryrun
+> /usr/lib/systemd/system-generators/podman-system-generator --user --dryrun
 quadlet-generator[1503]: Loading source unit file /home/scawork/.config/containers/systemd/scamonitor.container
 ---scamonitor.service---
 # Podman Quadlet Container File
@@ -268,12 +268,12 @@ WantedBy=default.target
 1. Login as **scawork**
 2. Run `podman images` to confirm the container image is missing
 ```
-\> podman images
+> podman images
 REPOSITORY  TAG         IMAGE ID    CREATED     SIZE
 ```
 3. Run `systemctl --user status scamonitor.service` to check the status
 ```
-\> systemctl --user status scamonitor
+> systemctl --user status scamonitor
 ● scamonitor.service - SCA Tool Container
      Loaded: loaded (/home/scawork/.config/containers/systemd/scamonitor.container; generated)
      Active: activating (start) since Fri 2024-01-26 10:22:53 UTC; 42s ago
@@ -297,7 +297,7 @@ Jan 26 10:23:27 slem55 scamonitor[1070]: time="2024-01-26T10:23:27Z" level=warni
 4. The `Error: initializing source` usually means the registry is busy or down.
 5. Manually pull the image until it downloads successfully.
 ```
-\> podman pull registry.opensuse.org/home/jrecord/branches/opensuse/templates/images/tumbleweed/containers/suse/alp/workloads/scatool:latest
+> podman pull registry.opensuse.org/home/jrecord/branches/opensuse/templates/images/tumbleweed/containers/suse/alp/workloads/scatool:latest
 Trying to pull registry.opensuse.org/home/jrecord/branches/opensuse/templates/images/tumbleweed/containers/suse/alp/workloads/scatool:latest...
 Getting image source signatures
 Copying blob bb3d399028e9 done   | 
@@ -306,14 +306,14 @@ Copying config cd2a1d820a done   |
 Writing manifest to image destination
 cd2a1d820afc1d3654140ecc1f91af076e3681a1d5d9bcbfe1ac7440681c66c3
 
-\> podman images
+> podman images
 REPOSITORY                                                                                                              TAG         IMAGE ID      CREATED       SIZE
 registry.opensuse.org/home/jrecord/branches/opensuse/templates/images/tumbleweed/containers/suse/alp/workloads/scatool  latest      cd2a1d820afc  36 hours ago  305 MB
 ```
 6. Once downloaded, start the `scamonitor.service` with `systemctl --user start scamonitor.service`
 ```
-\> systemctl --user start scamonitor.service
-\> systemctl --user status scamonitor.service
+> systemctl --user start scamonitor.service
+> systemctl --user status scamonitor.service
 ● scamonitor.service - SCA Tool Container
      Loaded: loaded (/home/scawork/.config/containers/systemd/scamonitor.container; generated)
      Active: active (running) since Fri 2024-01-26 10:37:58 UTC; 3min 12s ago
