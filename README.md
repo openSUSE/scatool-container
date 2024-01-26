@@ -345,3 +345,84 @@ Jan 26 10:37:58 slem55 scamonitor[1610]: 2024-01-26 10:37:58.549757927 +0000 UTC
 Jan 26 10:37:58 slem55 scamonitor[1610]: 2024-01-26 10:37:58.550906023 +0000 UTC [Mode] Entrypoint:   Monitoring /var/scatool/incoming
 Jan 26 10:37:58 slem55 scamonitor[1610]: 2024-01-26 10:37:58.551342527 +0000 UTC [Note] Entrypoint:   Monitoring interval: 5 sec
 ```
+
+## No container logs are showing
+1. The `scamonitor.service` and podman logs are not showing under SLES 15 or SLE Micro 5 even though the container is running
+```
+> podman ps
+CONTAINER ID  IMAGE                                                                                                                          COMMAND     CREATED        STATUS        PORTS       NAMES
+cb77dc513e89  registry.opensuse.org/home/jrecord/branches/opensuse/templates/images/tumbleweed/containers/suse/alp/workloads/scatool:latest              3 minutes ago  Up 3 minutes              scamonitor
+
+> podman logs scamonitor
+
+> systemctl --user status scamonitor.service
+● scamonitor.service - SCA Tool Container
+     Loaded: loaded (/home/scawork/.config/containers/systemd/scamonitor.container; generated)
+     Active: active (running) since Fri 2024-01-26 04:06:15 MST; 3min 38s ago
+   Main PID: 1657 (conmon)
+      Tasks: 4 (limit: 1953)
+     Memory: 345.5M
+        CPU: 3.765s
+     CGroup: /user.slice/user-1002.slice/user@1002.service/app.slice/scamonitor.service
+             ├─libpod-payload-cb77dc513e89cba4fbf4786634d0ecde848d65abb2221d240626a62f77bbdb16
+             │ ├─ 1667 /bin/bash /usr/local/bin/entrypoint.sh
+             │ └─ 1815 sleep 5
+             └─runtime
+               ├─ 1651 /usr/bin/slirp4netns --disable-host-loopback --mtu=65520 --enable-sandbox --enable-seccomp --enable-ipv6 -c -r 3 -e 4 --netns-type=path /run/user/1002/netns/netns-6bb5a176-2f11-2a67-e0a5-a66>
+               └─ 1657 /usr/bin/conmon --api-version 1 -c cb77dc513e89cba4fbf4786634d0ecde848d65abb2221d240626a62f77bbdb16 -u cb77dc513e89cba4fbf4786634d0ecde848d65abb2221d240626a62f77bbdb16 -r /usr/bin/runc -b /h>
+```
+2. Add scawork to the `systemd-journal` group
+```
+> sudo usermod -a -G systemd-journal scawork
+> grep systemd-journal /etc/group
+systemd-journal:x:482:scawork
+```
+3. Logout and log back in as **scawork**
+4. Check the logs
+```
+> podman logs scamonitor
+2024-01-26 11:15:05.940182557 +0000 UTC [Note] Entrypoint:   Supportconfig analysis workload container starting
+2024-01-26 11:15:05.941219104 +0000 UTC [Note] Entrypoint:   Package versions:
+sca-patterns-base-1.6.0-2.1.noarch
+sca-server-report-1.6.1-1.1.noarch
+sca-patterns-sle15-1.5.6-1.1.noarch
+sca-patterns-sle12-1.5.6-1.1.noarch
+sca-patterns-sle11-1.5.4-1.1.noarch
+sca-patterns-alp1-2.0.1-1.1.noarch
+
+2024-01-26 11:15:05.985088034 +0000 UTC [Note] Entrypoint:   SCA Tool patterns:
+#####################################################################################
+#   SCA Tool v3.0.1
+#####################################################################################
+
+Pattern Library Summary
+      
+Pattern Directory : Count     
+================= : =====     
+          alp1all : 12        
+         sle11all : 135       
+         sle11sp0 : 6         
+         sle11sp1 : 180       
+         sle11sp2 : 290       
+         sle11sp3 : 360       
+         sle11sp4 : 382       
+         sle12all : 121       
+         sle12sp0 : 547       
+         sle12sp1 : 571       
+         sle12sp2 : 691       
+         sle12sp3 : 634       
+         sle12sp4 : 709       
+         sle12sp5 : 986       
+         sle15all : 59        
+         sle15sp0 : 414       
+         sle15sp1 : 659       
+         sle15sp2 : 731       
+         sle15sp3 : 444       
+         sle15sp4 : 230       
+         sle15sp5 : 1         
+             8162 : Total Available Patterns
+
+
+2024-01-26 11:15:06.039957681 +0000 UTC [Mode] Entrypoint:   Monitoring /var/scatool/incoming
+2024-01-26 11:15:06.040352603 +0000 UTC [Note] Entrypoint:   Monitoring interval: 5 sec
+```
