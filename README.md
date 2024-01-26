@@ -48,7 +48,7 @@ ls -l ${HOME}/scatool/reports
 7. Each supportconfig will have a corresponding analysis file in the `${HOME}/scatool/logs` directory
 
 # Installation and Configuration for User SystemD Container on ALP1 and SLE Micro 6.0
-1. Install SUSE ALP with podman
+1. Install SUSE ALP1 or SLE Micro 6.0
 2. Login as **root**:
    1. Add the scawork user
    2. Assign scawork a password
