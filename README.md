@@ -22,6 +22,7 @@ A rootless podman container to analyze SLES11, SLES12, SLES15 and ALP1 supportco
 * Upstream Source: https://github.com/openSUSE/scatool-container
 * Container Registry: https://registry.opensuse.org/cgi-bin/cooverview?srch_term=project%3D%5Ehome%3Ajrecord
 * OBS Package: https://build.opensuse.org/package/show/home:jrecord:branches:openSUSE:Templates:Images:Tumbleweed/scatool-container
+* SUSE:ALP:Workloads Package: https://build.opensuse.org/package/show/SUSE:ALP:Workloads/scatool-container
 * `podman pull registry.opensuse.org/home/jrecord/branches/opensuse/templates/images/tumbleweed/containers/suse/alp/workloads/scatool:latest`
 
 > [!NOTE]
