@@ -13,7 +13,7 @@ A rootless podman container to analyze SLES11, SLES12, SLES15 and ALP1 supportco
 ## Index to Sections
 * [Rootless SystemD Service on ALP1](#installation-and-configuration-for-user-systemd-container-on-alp1)
 * [Rootless SystemD Service on SLES 15 SP5](#installation-and-configuration-for-user-systemd-container-on-sles-15-sp5)
-* [Rootless SystemD Service on SLE Micro 5.5](#installation-and-configuration-for-user-systemd-container-on-sle-micro-5.5)
+* [Rootless SystemD Service on SLE Micro 5.5](#installation-and-configuration-for-user-systemd-container-on-sle-micro-55)
 * [Rootless Container as Needed on Any](#how-to-use-the-sca-tool-container-as-needed)
 * [How to Update the SCA Tool Container](#how-to-update-the-sca-tool-container)
 
