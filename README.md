@@ -93,6 +93,8 @@ systemctl --user status scamonitor.service
 ```
 
 # Installation and Configuration for User SystemD Container on SLES 15 SP5
+> [!NOTE]
+> You can install on SLES 15 SP4 as well, but no terminal logging is available. SLES 15 SP5 and higher is recommened.
 1. Install SUSE SLES 15 SP5
 2. Install podman from the Containers Module
 3. Login as **root**:
