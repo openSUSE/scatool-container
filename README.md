@@ -11,7 +11,7 @@ A rootless podman container to analyze SLES11, SLES12, SLES15 and ALP1 supportco
 * `/var/scatool/logs` to `${HOME}/scatool/logs` - scatool logs and shared files
 
 ## Index to Sections
-* [Rootless SystemD Service on ALP1](#installation-and-configuration-for-user-systemd-container-on-alp1)
+* [Rootless SystemD Service on ALP1 and SLE Micro 6.0](#installation-and-configuration-for-user-systemd-container-on-alp1-and-sle-micro-60)
 * [Rootless SystemD Service on SLES 15 SP5](#installation-and-configuration-for-user-systemd-container-on-sles-15-sp5)
 * [Rootless SystemD Service on SLE Micro 5.5](#installation-and-configuration-for-user-systemd-container-on-sle-micro-55)
 * [Rootless Container as Needed on Any](#how-to-use-the-sca-tool-container-as-needed)
@@ -47,7 +47,7 @@ ls -l ${HOME}/scatool/reports
 ```
 7. Each supportconfig will have a corresponding analysis file in the `${HOME}/scatool/logs` directory
 
-# Installation and Configuration for User SystemD Container on ALP1
+# Installation and Configuration for User SystemD Container on ALP1 and SLE Micro 6.0
 1. Install SUSE ALP with podman
 2. Login as **root**:
    1. Add the scawork user
