@@ -16,6 +16,7 @@ A rootless podman container to analyze SLES11, SLES12, SLES15 and ALP1 supportco
 * [Rootless SystemD Service on SLE Micro 5.5](#installation-and-configuration-for-user-systemd-container-on-sle-micro-55)
 * [Rootless Container as Needed on Any](#how-to-use-the-sca-tool-container-as-needed)
 * [How to Update the SCA Tool Container](#how-to-update-the-sca-tool-container)
+* [Troubleshooting Issues](#troubleshooting-issues)
 
 ## Projects
 * Upstream Source: https://github.com/openSUSE/scatool-container
@@ -267,7 +268,7 @@ WantedBy=default.target
 1. Login as **scawork**
 2. Run `podman images` to confirm the container image is missing
 ```
-> podman images
+\> podman images
 REPOSITORY  TAG         IMAGE ID    CREATED     SIZE
 ```
 3. Run `systemctl --user status scamonitor.service` to check the status
@@ -294,7 +295,7 @@ Jan 26 10:23:15 slem55 scamonitor[1070]: time="2024-01-26T10:23:15Z" level=warni
 Jan 26 10:23:27 slem55 scamonitor[1070]: time="2024-01-26T10:23:27Z" level=warning msg="Failed, retrying in 1s ... (3/3). Error: initializing source docker://registry.opensuse.org/home/jrecord/branches/opensuse/te>
 ```
 4. The `Error: initializing source` usually means the registry is busy or down.
-5. Manually pull the image until it download successfully.
+5. Manually pull the image until it downloads successfully.
 ```
 \> podman pull registry.opensuse.org/home/jrecord/branches/opensuse/templates/images/tumbleweed/containers/suse/alp/workloads/scatool:latest
 Trying to pull registry.opensuse.org/home/jrecord/branches/opensuse/templates/images/tumbleweed/containers/suse/alp/workloads/scatool:latest...
@@ -304,13 +305,13 @@ Copying blob b784dfba2061 done   |
 Copying config cd2a1d820a done   | 
 Writing manifest to image destination
 cd2a1d820afc1d3654140ecc1f91af076e3681a1d5d9bcbfe1ac7440681c66c3
-```
-6. Once downloaded, start the `scamonitor.service` with `systemctl --user start scamonitor.service`
-```
+
 \> podman images
 REPOSITORY                                                                                                              TAG         IMAGE ID      CREATED       SIZE
 registry.opensuse.org/home/jrecord/branches/opensuse/templates/images/tumbleweed/containers/suse/alp/workloads/scatool  latest      cd2a1d820afc  36 hours ago  305 MB
-
+```
+6. Once downloaded, start the `scamonitor.service` with `systemctl --user start scamonitor.service`
+```
 \> systemctl --user start scamonitor.service
 \> systemctl --user status scamonitor.service
 ● scamonitor.service - SCA Tool Container
