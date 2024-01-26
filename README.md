@@ -347,7 +347,9 @@ Jan 26 10:37:58 slem55 scamonitor[1610]: 2024-01-26 10:37:58.551342527 +0000 UTC
 ```
 
 ## No container logs are showing
-1. The `scamonitor.service` and podman logs are not showing under SLES 15 or SLE Micro 5 even though the container is running
+1. The `scamonitor.service` and podman logs are not showing under SLES 15 SP5 or SLE Micro 5.5 even though the container is running
+> [!WARNING]
+> Depite the fix, the issue persists with SLES 15 SP4
 ```
 > podman ps
 CONTAINER ID  IMAGE                                                                                                                          COMMAND     CREATED        STATUS        PORTS       NAMES
