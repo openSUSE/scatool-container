@@ -62,7 +62,7 @@ echo 'scawork:<password>' | chpasswd
 loginctl enable-linger scawork
 [[ -d /etc/supportutils ]] && echo 'LOCAL_PODMAN_USERS=scawork' >> /etc/supportutils/supportconfig.conf || echo 'LOCAL_PODMAN_USERS=scawork' >> /etc/supportconfig.conf
 sed -i -e 's/GRUB_CMDLINE_LINUX_DEFAULT="/GRUB_CMDLINE_LINUX_DEFAULT="systemd.unified_cgroup_hierarchy=1 /g' /etc/default/grub
-transactional-update run grub2-mkconfig -o /boot/grub2/grub.cfg
+transactional-update grub.cfg
 ```
 3. Login as **scawork**:
    1. Create a symlink to the container's working directory
@@ -112,7 +112,7 @@ loginctl enable-linger scawork
 [[ -d /etc/supportutils ]] && echo 'LOCAL_PODMAN_USERS=scawork' >> /etc/supportutils/supportconfig.conf || echo 'LOCAL_PODMAN_USERS=scawork' >> /etc/supportconfig.conf
 sed -i -e 's/GRUB_CMDLINE_LINUX_DEFAULT="/GRUB_CMDLINE_LINUX_DEFAULT="systemd.unified_cgroup_hierarchy=1 /g' /etc/default/grub
 sed -i -e 's/systemd-journal:x:\(.*\):/systemd-journal:x:\1:scawork/g' /etc/group
-grub2-mkconfig -o /boot/grub2/grub.cfg
+config -o /boot/grub2/grub.cfg
 ```
 
 4. Login as **scawork**:
@@ -159,7 +159,7 @@ loginctl enable-linger scawork
 [[ -d /etc/supportutils ]] && echo 'LOCAL_PODMAN_USERS=scawork' >> /etc/supportutils/supportconfig.conf || echo 'LOCAL_PODMAN_USERS=scawork' >> /etc/supportconfig.conf
 sed -i -e 's/GRUB_CMDLINE_LINUX_DEFAULT="/GRUB_CMDLINE_LINUX_DEFAULT="systemd.unified_cgroup_hierarchy=1 /g' /etc/default/grub
 sed -i -e 's/systemd-journal:x:\(.*\):/systemd-journal:x:\1:scawork/g' /etc/group
-transactional-update run grub2-mkconfig -o /boot/grub2/grub.cfg
+transactional-update grub.cfg
 ```
 
 3. Login as **scawork**:
