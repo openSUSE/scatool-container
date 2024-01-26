@@ -185,7 +185,7 @@ systemctl --user status scamonitor
 
 # How to Update the SCA Tool Container
 1. Pull the new image
-2. Restart the scamonitor.service
+2. Restart the `scamonitor.service` or re-run the SCA Tool Container as needed
 ```
 podman pull registry.opensuse.org/home/jrecord/branches/opensuse/templates/images/tumbleweed/containers/suse/alp/workloads/scatool:latest
 systemtl --user restart scamonitor.service
