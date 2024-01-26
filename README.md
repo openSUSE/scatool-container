@@ -54,15 +54,11 @@ ls -l ${HOME}/scatool/reports
    2. Assign scawork a password
    3. Enable linger for scawork
    4. Configure supportconfig to gather podman information from scawork
-   5. Configure unified cgroups on boot
-   6. Update grub
 ```
 useradd -m scawork
 echo 'scawork:<password>' | chpasswd
 loginctl enable-linger scawork
 [[ -d /etc/supportutils ]] && echo 'LOCAL_PODMAN_USERS=scawork' >> /etc/supportutils/supportconfig.conf || echo 'LOCAL_PODMAN_USERS=scawork' >> /etc/supportconfig.conf
-sed -i -e 's/GRUB_CMDLINE_LINUX_DEFAULT="/GRUB_CMDLINE_LINUX_DEFAULT="systemd.unified_cgroup_hierarchy=1 /g' /etc/default/grub
-transactional-update grub.cfg
 ```
 3. Login as **scawork**:
    1. Create a symlink to the container's working directory
@@ -81,16 +77,15 @@ cp scamonitor.container ${HOME}/.config/containers/systemd
 > [!TIP]
 > You can run `/usr/lib/systemd/system-generators/podman-system-generator --user --dryrun` to check if a valid systemd unit will be generated
 
-4. Reboot the server. This will enable unified cgroups and confirm the container service will start at boot time.
-5. Login as **scawork**:
-   1. Check for cgroup version 2
-   2. Check the `scamonitor.service` status
-```
-podman info | grep cgroupVersion
-  cgroupVersion: v2
-
-systemctl --user status scamonitor.service
-```
+4. Start `scamonitor.service`
+   1. You can reboot the server to confirm the `scamonitor.service` starts as expected. The scamonitor.service unit file will automatcially be generated.
+      1. `sudo reboot`
+      2. Login as **scawork**:
+      3. Check the status `systemctl --user status scamonitor.service`
+   2. If you don't want to reboot:
+      1. Run `systemctl --user daemon-reload` to generate the service unit
+      2. Run `systemctl --user start scamonitor.service`
+      3. Check the status of the service with `systemctl --user status scamonitor.service`
 
 # Installation and Configuration for User SystemD Container on SLES 15 SP5
 > [!NOTE]
