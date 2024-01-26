@@ -263,6 +263,11 @@ ExecStart=/usr/bin/podman run --name=scamonitor --cidfile=%t/%N.cid --replace --
 [Install]
 WantedBy=default.target
 ```
+4. Once you know the systemd unit file will be created, you can reboot the server to confirm the service will start automatically at boot time.
+5. If you don't want to reboot:
+   1. Run `systemctl --user daemon-reload` to generate the service unit
+   2. Run `systemctl --user start scamonitor.service`
+   3. Check the status of the service with `systemctl --user status scamonitor.service`
 
 ## The SCA Tool Container image is missing
 1. Login as **scawork**
