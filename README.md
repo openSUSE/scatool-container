@@ -46,6 +46,7 @@ podman logs scamonitor
 ls -l ${HOME}/scatool/reports
 ```
 7. Each supportconfig will have a corresponding analysis file in the `${HOME}/scatool/logs` directory
+[Top](#index-to-sections)
 
 # Installation and Configuration for User SystemD Container on ALP1 and SLE Micro 6.0
 1. Install SUSE ALP1 or SLE Micro 6.0
@@ -86,6 +87,7 @@ cp scamonitor.container ${HOME}/.config/containers/systemd
       1. Run `systemctl --user daemon-reload` to generate the service unit
       2. Run `systemctl --user start scamonitor.service`
       3. Check the status of the service with `systemctl --user status scamonitor.service`
+[Top](#index-to-sections)
 
 # Installation and Configuration for User SystemD Container on SLES 15 SP5
 > [!NOTE]
@@ -136,6 +138,7 @@ podman info | grep cgroupVersion
 
 systemctl --user status scamonitor
 ```
+[Top](#index-to-sections)
 
 # Installation and Configuration for User SystemD Container on SLE Micro 5.5
 1. Install SUSE SLE Micro 5.5 
@@ -183,6 +186,7 @@ podman info | grep cgroupVersion
 
 systemctl --user status scamonitor
 ```
+[Top](#index-to-sections)
 
 # How to Use the SCA Tool Container as Needed
 1. Login as **scawork**
@@ -210,6 +214,7 @@ podman run -dt --rm -v scavol:/var/scatool:z --name sca scatool:latest
 podman logs sca
 ls -l ${HOME}/scatool/reports
 ```
+[Top](#index-to-sections)
 
 # How to Update the SCA Tool Container
 1. Pull the new image
@@ -218,6 +223,7 @@ ls -l ${HOME}/scatool/reports
 podman pull registry.opensuse.org/home/jrecord/branches/opensuse/templates/images/tumbleweed/containers/suse/alp/workloads/scatool:latest
 systemtl --user restart scamonitor.service
 ```
+[Top](#index-to-sections)
 
 # Troubleshooting Issues
 ## The SystemD Unit is not created from the quadlet file
@@ -268,6 +274,7 @@ WantedBy=default.target
    1. Run `systemctl --user daemon-reload` to generate the service unit
    2. Run `systemctl --user start scamonitor.service`
    3. Check the status of the service with `systemctl --user status scamonitor.service`
+[Top](#index-to-sections)
 
 ## The SCA Tool Container image is missing
 1. Login as **scawork**
@@ -345,9 +352,10 @@ Jan 26 10:37:58 slem55 scamonitor[1610]: 2024-01-26 10:37:58.549757927 +0000 UTC
 Jan 26 10:37:58 slem55 scamonitor[1610]: 2024-01-26 10:37:58.550906023 +0000 UTC [Mode] Entrypoint:   Monitoring /var/scatool/incoming
 Jan 26 10:37:58 slem55 scamonitor[1610]: 2024-01-26 10:37:58.551342527 +0000 UTC [Note] Entrypoint:   Monitoring interval: 5 sec
 ```
+[Top](#index-to-sections)
 
 ## No container logs are showing
-1. The `scamonitor.service` and podman logs are not showing under SLES 15 SP5 or SLE Micro 5.5 even though the container is running
+**Issue:** The `scamonitor.service` and podman logs are not showing under SLES 15 SP5 or SLE Micro 5.5 even though the container is running
 > [!WARNING]
 > Despite the fix, the issue persists with SLES 15 SP4
 ```
@@ -373,14 +381,15 @@ cb77dc513e89  registry.opensuse.org/home/jrecord/branches/opensuse/templates/ima
                ├─ 1651 /usr/bin/slirp4netns --disable-host-loopback --mtu=65520 --enable-sandbox --enable-seccomp --enable-ipv6 -c -r 3 -e 4 --netns-type=path /run/user/1002/netns/netns-6bb5a176-2f11-2a67-e0a5-a66>
                └─ 1657 /usr/bin/conmon --api-version 1 -c cb77dc513e89cba4fbf4786634d0ecde848d65abb2221d240626a62f77bbdb16 -u cb77dc513e89cba4fbf4786634d0ecde848d65abb2221d240626a62f77bbdb16 -r /usr/bin/runc -b /h>
 ```
-2. Add scawork to the `systemd-journal` group
+**Resolution:**
+1. Add scawork to the `systemd-journal` group
 ```
 > sudo usermod -a -G systemd-journal scawork
 > grep systemd-journal /etc/group
 systemd-journal:x:482:scawork
 ```
-3. Logout and log back in as **scawork**
-4. Check the logs
+2. Logout and log back in as **scawork**
+3. Check the logs
 ```
 > podman logs scamonitor
 2024-01-26 11:15:05.940182557 +0000 UTC [Note] Entrypoint:   Supportconfig analysis workload container starting
@@ -428,3 +437,19 @@ Pattern Directory : Count
 2024-01-26 11:15:06.039957681 +0000 UTC [Mode] Entrypoint:   Monitoring /var/scatool/incoming
 2024-01-26 11:15:06.040352603 +0000 UTC [Note] Entrypoint:   Monitoring interval: 5 sec
 ```
+[Top](#index-to-sections)
+
+## Failed to Mount Subscriptions
+**Issue:** The following warning message is observed when starting the SCA Tool Container.
+```
+WARN[0000] Failed to mount subscriptions, skipping entry in /etc/containers/mounts.conf: open /etc/zypp/credentials.d/SCCcredentials: permission denied
+```
+The container still runs, but the warning messages persist.
+
+**Resolution:**
+1. Create an empty `${HOME}/.config/containers/mounts.conf` file
+```
+touch ${HOME}/.config/containers/mounts.conf
+```
+3. The SCA Tool Container does not need any subscriptions, so the empty mounts.conf file tells the user space to ignore them.
+[Top](#index-to-sections)
