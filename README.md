@@ -17,6 +17,10 @@ A rootless podman container to analyze SLES11, SLES12, SLES15 and ALP1 supportco
 * [Rootless Container as Needed on Any](#how-to-use-the-sca-tool-container-as-needed)
 * [How to Update the SCA Tool Container](#how-to-update-the-sca-tool-container)
 * [Troubleshooting Issues](#troubleshooting-issues)
+  * [The SystemD Unit is not created from the quadlet file](#the-systemd-unit-is-not-created-from-the-quadlet-file)
+  * [The SCA Tool Container image is missing](#the-sca-tool-container-image-is-missing)
+  * [No container logs are showing](#no-container-logs-are-showing)
+  * [Failed to Mount Subscriptions](#failed-to-mount-subscriptions)
 
 ## Projects
 * Upstream Source: https://github.com/openSUSE/scatool-container
