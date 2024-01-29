@@ -32,7 +32,7 @@ A rootless podman container to analyze SLES11, SLES12, SLES15 and ALP1 supportco
 
 
 > [!NOTE]
-> All instructions assume you will be running the SCA Tool Container as a user SystemD process. If you do not intend to run it under SystemD, but only on an as-needed basis, skip to [How to Use the SCA Tool Container as Needed](#how-to-use-the-sca-tool-container-as-needed) below.
+> All instructions assume you will be running the SCA Tool Container as the **scawork** user with its user SystemD service. If you do not intend to run it as a service, but only on an as-needed basis, skip to [How to Use the SCA Tool Container as Needed](#how-to-use-the-sca-tool-container-as-needed) below.
 
 # How to Analyze Supportconfigs
 1. Run supportconfigs on the servers you wish to analyze
