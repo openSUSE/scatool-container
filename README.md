@@ -45,7 +45,8 @@ sudo chmod 644 ${HOME}/scatool/incoming/*
 podman logs scamonitor
 ls -l ${HOME}/scatool/reports
 ```
-7. Each supportconfig will have a corresponding analysis file in the `${HOME}/scatool/logs` directory  
+7. Each supportconfig will have a corresponding analysis file in the `${HOME}/scatool/logs` directory
+
 [Top](#index-to-sections)
 
 # Installation and Configuration for User SystemD Container on ALP1 and SLE Micro 6.0
@@ -86,7 +87,8 @@ cp scamonitor.container ${HOME}/.config/containers/systemd
    2. If you don't want to reboot:
       1. Run `systemctl --user daemon-reload` to generate the service unit
       2. Run `systemctl --user start scamonitor.service`
-      3. Check the status of the service with `systemctl --user status scamonitor.service`  
+      3. Check the status of the service with `systemctl --user status scamonitor.service`
+
 [Top](#index-to-sections)
 
 # Installation and Configuration for User SystemD Container on SLES 15 SP5
@@ -137,7 +139,8 @@ podman info | grep cgroupVersion
   cgroupVersion: v2
 
 systemctl --user status scamonitor
-```  
+```
+
 [Top](#index-to-sections)
 
 # Installation and Configuration for User SystemD Container on SLE Micro 5.5
@@ -185,7 +188,8 @@ podman info | grep cgroupVersion
   cgroupVersion: v2
 
 systemctl --user status scamonitor
-```  
+```
+
 [Top](#index-to-sections)
 
 # How to Use the SCA Tool Container as Needed
@@ -273,7 +277,8 @@ WantedBy=default.target
 5. If you don't want to reboot:
    1. Run `systemctl --user daemon-reload` to generate the service unit
    2. Run `systemctl --user start scamonitor.service`
-   3. Check the status of the service with `systemctl --user status scamonitor.service`  
+   3. Check the status of the service with `systemctl --user status scamonitor.service`
+
 [Top](#index-to-sections)
 
 ## The SCA Tool Container image is missing
