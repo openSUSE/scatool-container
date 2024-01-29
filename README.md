@@ -297,7 +297,7 @@ WantedBy=default.target
 
 ## The SCA Tool Container image is missing
 **Issue:**
-The SystemD `scamonitor.service` unit file is generated, but no SCA Tool Container is found.
+No SCA Tool Container image is found after the SystemD `scamonitor.service` unit file is generated and started.
 ```
 > podman images
 REPOSITORY  TAG         IMAGE ID    CREATED     SIZE
