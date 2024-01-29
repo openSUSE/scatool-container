@@ -69,7 +69,7 @@ loginctl enable-linger scawork
 3. Login as **scawork**:
    1. Create a symlink to the container's working directory
    2. Create the podman quadlet directory
-   3. Install the [scamonitor.container](https://github.com/openSUSE/scatool-container/blob/main/scamonitor.container) quadlet file to `${HOME}/.config/containers/systemd/scamonitor.container`
+   3. Install the [scamonitor.container](https://github.com/openSUSE/scatool-container/blob/main/scamonitor.container) quadlet file to `${HOME}/.config/containers/systemd/scamonitor.container` (See [troubleshooting](#the-systemd-unit-is-not-created-from-the-quadlet-file))
 
 > [!NOTE]
 > The `scamonitor.service` will pull the `scatool:latest` image if not found. You can manually pull the image with:  
@@ -80,9 +80,6 @@ ln -sf ${HOME}/.local/share/containers/storage/volumes/scavol/_data ${HOME}/scat
 mkdir -p ${HOME}/.config/containers/systemd
 cp scamonitor.container ${HOME}/.config/containers/systemd
 ```
-> [!TIP]
-> You can run `/usr/lib/systemd/system-generators/podman-system-generator --user --dryrun` for [troubleshooting](#the-systemd-unit-is-not-created-from-the-quadlet-file) and checking if a valid systemd unit will be generated
-
 4. Start `scamonitor.service`
    1. You can reboot the server to confirm the `scamonitor.service` starts as expected. The scamonitor.service unit file will automatcially be generated.
       1. `sudo reboot`
@@ -122,7 +119,7 @@ grub2-mkconfig -o /boot/grub2/grub.cfg
    1. Create a symlink to the container's working directory
    2. Create the podman quadlet directory
    3. Create an empty `${HOME}/.config/containers/mounts.conf` file
-   4. Install the [scamonitor.container](https://github.com/openSUSE/scatool-container/blob/main/scamonitor.container) quadlet file to `${HOME}/.config/containers/systemd/scamonitor.container`
+   4. Install the [scamonitor.container](https://github.com/openSUSE/scatool-container/blob/main/scamonitor.container) quadlet file to `${HOME}/.config/containers/systemd/scamonitor.container` (See [troubleshooting](#the-systemd-unit-is-not-created-from-the-quadlet-file))
 
 > [!NOTE]
 > The `scamonitor.service` will pull the `scatool:latest` image if not found. You can manually pull the image with:  
@@ -134,9 +131,6 @@ mkdir -p ${HOME}/.config/containers/systemd
 touch ${HOME}/.config/containers/mounts.conf
 cp scamonitor.container ${HOME}/.config/containers/systemd
 ```
-> [!TIP]
-> You can run `/usr/lib/systemd/system-generators/podman-system-generator --user --dryrun` for [troubleshooting](#the-systemd-unit-is-not-created-from-the-quadlet-file) and checking if a valid systemd unit will be generated
-
 5. Reboot the server. This will enable unified cgroups v2 and confirm the container service will start at boot time.
 6. Login as **scawork**:
    1. Check for cgroup version 2
@@ -174,7 +168,7 @@ transactional-update grub.cfg
    1. Create a symlink to the container's working directory
    2. Create the podman quadlet directory
    3. Create an empty `${HOME}/.config/containers/mounts.conf` file
-   4. Install the [scamonitor.container](https://github.com/openSUSE/scatool-container/blob/main/scamonitor.container) quadlet file to `${HOME}/.config/containers/systemd/scamonitor.container`
+   4. Install the [scamonitor.container](https://github.com/openSUSE/scatool-container/blob/main/scamonitor.container) quadlet file to `${HOME}/.config/containers/systemd/scamonitor.container` (See [troubleshooting](#the-systemd-unit-is-not-created-from-the-quadlet-file))
 
 > [!NOTE]
 > The `scamonitor.service` will pull the `scatool:latest` image if not found. You can manually pull the image with:  
@@ -186,9 +180,6 @@ mkdir -p ${HOME}/.config/containers/systemd
 touch ${HOME}/.config/containers/mounts.conf
 cp scamonitor.container ${HOME}/.config/containers/systemd
 ```
-> [!TIP]
-> You can run `/usr/lib/systemd/system-generators/podman-system-generator --user --dryrun` for [troubleshooting](#the-systemd-unit-is-not-created-from-the-quadlet-file) and checking if a valid systemd unit will be generated
-
 4. Reboot the server. This will enable unified cgroups v2 and confirm the container service will start at boot time.
 5. Login as **scawork**:
    1. Check for cgroup version 2
