@@ -81,7 +81,7 @@ mkdir -p ${HOME}/.config/containers/systemd
 cp scamonitor.container ${HOME}/.config/containers/systemd
 ```
 > [!TIP]
-> You can run `/usr/lib/systemd/system-generators/podman-system-generator --user --dryrun` to check if a valid systemd unit will be generated
+> You can run `/usr/lib/systemd/system-generators/podman-system-generator --user --dryrun` for [troubleshooting](#the-systemd-unit-is-not-created-from-the-quadlet-file) and checking if a valid systemd unit will be generated
 
 4. Start `scamonitor.service`
    1. You can reboot the server to confirm the `scamonitor.service` starts as expected. The scamonitor.service unit file will automatcially be generated.
@@ -134,6 +134,9 @@ mkdir -p ${HOME}/.config/containers/systemd
 touch ${HOME}/.config/containers/mounts.conf
 cp scamonitor.container ${HOME}/.config/containers/systemd
 ```
+> [!TIP]
+> You can run `/usr/lib/systemd/system-generators/podman-system-generator --user --dryrun` for [troubleshooting](#the-systemd-unit-is-not-created-from-the-quadlet-file) and checking if a valid systemd unit will be generated
+
 5. Reboot the server. This will enable unified cgroups v2 and confirm the container service will start at boot time.
 6. Login as **scawork**:
    1. Check for cgroup version 2
@@ -183,6 +186,9 @@ mkdir -p ${HOME}/.config/containers/systemd
 touch ${HOME}/.config/containers/mounts.conf
 cp scamonitor.container ${HOME}/.config/containers/systemd
 ```
+> [!TIP]
+> You can run `/usr/lib/systemd/system-generators/podman-system-generator --user --dryrun` for [troubleshooting](#the-systemd-unit-is-not-created-from-the-quadlet-file) and checking if a valid systemd unit will be generated
+
 4. Reboot the server. This will enable unified cgroups v2 and confirm the container service will start at boot time.
 5. Login as **scawork**:
    1. Check for cgroup version 2
@@ -235,6 +241,10 @@ systemtl --user restart scamonitor.service
 
 # Troubleshooting Issues
 ## The SystemD Unit is not created from the quadlet file
+**Issue:**
+The `scamonitor.container` quadlet file is installed, but the `scamonitor.service` SystemD unit file is not generated.
+
+**Resolution:**
 1. Login as **scawork**
 2. Make sure the `${HOME}/.config/containers/systemd/scamonitor.container` file is present
 ```
@@ -286,6 +296,16 @@ WantedBy=default.target
 [Top](#index-to-sections)
 
 ## The SCA Tool Container image is missing
+**Issue:**
+The SystemD `scamonitor.service` unit file is generated, but no SCA Tool Container is found.
+```
+> podman images
+REPOSITORY  TAG         IMAGE ID    CREATED     SIZE
+```
+
+The `scamonitor.service` status shows `Error: initializing source` or `Active: activating` but never starts the container.
+
+**Resolution:**
 1. Login as **scawork**
 2. Run `podman images` to confirm the container image is missing
 ```
