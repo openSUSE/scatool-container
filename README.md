@@ -451,5 +451,6 @@ The container still runs, but the warning messages persist.
 ```
 touch ${HOME}/.config/containers/mounts.conf
 ```
-3. The SCA Tool Container does not need any subscriptions, so the empty mounts.conf file tells the user space to ignore them.  
+3. The SCA Tool Container does not need any subscriptions, so the empty mounts.conf file tells the user space to ignore them.
+
 [Top](#index-to-sections)
