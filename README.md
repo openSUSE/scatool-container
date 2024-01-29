@@ -93,13 +93,13 @@ cp scamonitor.container ${HOME}/.config/containers/systemd
 1. Install SUSE SLES 15 SP5
 2. Install podman from the Containers Module
 3. Login as **root**:
-   1. Add the scawork user
+   1. Add the **scawork** user
    2. Assign scawork a password
    3. Enable linger for scawork
-   4. Configure supportconfig to gather podman information from scawork
-   5. Configure unified cgroups on boot
-   6. Add scawork to the systemd-journal group so it can see the container logs
-   7. Update grub.cfg
+   4. Configure **supportconfig** to gather podman information from scawork
+   5. Configure **unified cgroups v2** on boot
+   6. Add scawork to the **systemd-journal** group so it can see the container logs
+   7. Update **grub.cfg**
 ```
 useradd -m scawork
 echo 'scawork:<password>' | chpasswd
@@ -107,7 +107,7 @@ loginctl enable-linger scawork
 [[ -d /etc/supportutils ]] && echo 'LOCAL_PODMAN_USERS=scawork' >> /etc/supportutils/supportconfig.conf || echo 'LOCAL_PODMAN_USERS=scawork' >> /etc/supportconfig.conf
 sed -i -e 's/GRUB_CMDLINE_LINUX_DEFAULT="/GRUB_CMDLINE_LINUX_DEFAULT="systemd.unified_cgroup_hierarchy=1 /g' /etc/default/grub
 sed -i -e 's/systemd-journal:x:\(.*\):/systemd-journal:x:\1:scawork/g' /etc/group
-config -o /boot/grub2/grub.cfg
+grub2-mkconfig -o /boot/grub2/grub.cfg
 ```
 
 4. Login as **scawork**:
@@ -140,13 +140,13 @@ systemctl --user status scamonitor
 # Installation and Configuration for User SystemD Container on SLE Micro 5.5
 1. Install SUSE SLE Micro 5.5 
 2. Login as **root**:
-   1. Add the scawork user
+   1. Add the **scawork** user
    2. Assign scawork a password
    3. Enable linger for scawork
-   4. Configure supportconfig to gather podman information from scawork
-   5. Configure unified cgroups on boot
-   6. Add scawork to the systemd-journal group so it can see the container logs
-   7. Update grub.cfg
+   4. Configure **supportconfig** to gather podman information from scawork
+   5. Configure **unified cgroups v2** on boot
+   6. Add scawork to the **systemd-journal** group so it can see the container logs
+   7. Update **grub.cfg**
 ```
 useradd -m scawork
 echo 'scawork:<password>' | chpasswd
