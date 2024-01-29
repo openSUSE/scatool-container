@@ -45,7 +45,7 @@ sudo chmod 644 ${HOME}/scatool/incoming/*
 podman logs scamonitor
 ls -l ${HOME}/scatool/reports
 ```
-7. Each supportconfig will have a corresponding analysis file in the `${HOME}/scatool/logs` directory
+7. Each supportconfig will have a corresponding analysis file in the `${HOME}/scatool/logs` directory  
 [Top](#index-to-sections)
 
 # Installation and Configuration for User SystemD Container on ALP1 and SLE Micro 6.0
@@ -86,7 +86,7 @@ cp scamonitor.container ${HOME}/.config/containers/systemd
    2. If you don't want to reboot:
       1. Run `systemctl --user daemon-reload` to generate the service unit
       2. Run `systemctl --user start scamonitor.service`
-      3. Check the status of the service with `systemctl --user status scamonitor.service`
+      3. Check the status of the service with `systemctl --user status scamonitor.service`  
 [Top](#index-to-sections)
 
 # Installation and Configuration for User SystemD Container on SLES 15 SP5
@@ -137,7 +137,7 @@ podman info | grep cgroupVersion
   cgroupVersion: v2
 
 systemctl --user status scamonitor
-```
+```  
 [Top](#index-to-sections)
 
 # Installation and Configuration for User SystemD Container on SLE Micro 5.5
@@ -185,7 +185,7 @@ podman info | grep cgroupVersion
   cgroupVersion: v2
 
 systemctl --user status scamonitor
-```
+```  
 [Top](#index-to-sections)
 
 # How to Use the SCA Tool Container as Needed
@@ -213,7 +213,7 @@ podman run -dt --rm -v scavol:/var/scatool:z --name sca scatool:latest
 ```
 podman logs sca
 ls -l ${HOME}/scatool/reports
-```
+```  
 [Top](#index-to-sections)
 
 # How to Update the SCA Tool Container
@@ -222,7 +222,7 @@ ls -l ${HOME}/scatool/reports
 ```
 podman pull registry.opensuse.org/home/jrecord/branches/opensuse/templates/images/tumbleweed/containers/suse/alp/workloads/scatool:latest
 systemtl --user restart scamonitor.service
-```
+```  
 [Top](#index-to-sections)
 
 # Troubleshooting Issues
@@ -273,7 +273,7 @@ WantedBy=default.target
 5. If you don't want to reboot:
    1. Run `systemctl --user daemon-reload` to generate the service unit
    2. Run `systemctl --user start scamonitor.service`
-   3. Check the status of the service with `systemctl --user status scamonitor.service`
+   3. Check the status of the service with `systemctl --user status scamonitor.service`  
 [Top](#index-to-sections)
 
 ## The SCA Tool Container image is missing
@@ -351,7 +351,7 @@ Jan 26 10:37:58 slem55 scamonitor[1610]: 2024-01-26 10:37:58.548584858 +0000 UTC
 Jan 26 10:37:58 slem55 scamonitor[1610]: 2024-01-26 10:37:58.549757927 +0000 UTC [Warn] Entrypoint:   Create missing directory: /var/scatool/logs
 Jan 26 10:37:58 slem55 scamonitor[1610]: 2024-01-26 10:37:58.550906023 +0000 UTC [Mode] Entrypoint:   Monitoring /var/scatool/incoming
 Jan 26 10:37:58 slem55 scamonitor[1610]: 2024-01-26 10:37:58.551342527 +0000 UTC [Note] Entrypoint:   Monitoring interval: 5 sec
-```
+```  
 [Top](#index-to-sections)
 
 ## No container logs are showing
@@ -436,7 +436,7 @@ Pattern Directory : Count
 
 2024-01-26 11:15:06.039957681 +0000 UTC [Mode] Entrypoint:   Monitoring /var/scatool/incoming
 2024-01-26 11:15:06.040352603 +0000 UTC [Note] Entrypoint:   Monitoring interval: 5 sec
-```
+```  
 [Top](#index-to-sections)
 
 ## Failed to Mount Subscriptions
@@ -451,5 +451,5 @@ The container still runs, but the warning messages persist.
 ```
 touch ${HOME}/.config/containers/mounts.conf
 ```
-3. The SCA Tool Container does not need any subscriptions, so the empty mounts.conf file tells the user space to ignore them.
+3. The SCA Tool Container does not need any subscriptions, so the empty mounts.conf file tells the user space to ignore them.  
 [Top](#index-to-sections)
