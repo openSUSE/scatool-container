@@ -63,7 +63,7 @@ loginctl enable-linger scawork
 3. Login as **scawork**:
    1. Create a symlink to the container's working directory
    2. Create the podman quadlet directory
-   3. Install the [scamonitor.container](https://github.com/openSUSE/scatool-container/blob/main/scamonitor.container) quadlet file
+   3. Install the [scamonitor.container](https://github.com/openSUSE/scatool-container/blob/main/scamonitor.container) quadlet file to `${HOME}/.config/containers/systemd/scamonitor.container`
 
 > [!NOTE]
 > The `scamonitor.service` will pull the `scatool:latest` image if not found. You can manually pull the image with:  
@@ -114,7 +114,7 @@ config -o /boot/grub2/grub.cfg
    1. Create a symlink to the container's working directory
    2. Create the podman quadlet directory
    3. Create an empty `${HOME}/.config/containers/mounts.conf` file
-   4. Install the [scamonitor.container](https://github.com/openSUSE/scatool-container/blob/main/scamonitor.container) quadlet file
+   4. Install the [scamonitor.container](https://github.com/openSUSE/scatool-container/blob/main/scamonitor.container) quadlet file to `${HOME}/.config/containers/systemd/scamonitor.container`
 
 > [!NOTE]
 > The `scamonitor.service` will pull the `scatool:latest` image if not found. You can manually pull the image with:  
@@ -126,7 +126,7 @@ mkdir -p ${HOME}/.config/containers/systemd
 touch ${HOME}/.config/containers/mounts.conf
 cp scamonitor.container ${HOME}/.config/containers/systemd
 ```
-5. Reboot the server. This will enable unified cgroups and confirm the container service will start at boot time.
+5. Reboot the server. This will enable unified cgroups v2 and confirm the container service will start at boot time.
 6. Login as **scawork**:
    1. Check for cgroup version 2
    2. Check the `scamonitor.service` status
@@ -161,7 +161,7 @@ transactional-update grub.cfg
    1. Create a symlink to the container's working directory
    2. Create the podman quadlet directory
    3. Create an empty `${HOME}/.config/containers/mounts.conf` file
-   4. Install the [scamonitor.container](https://github.com/openSUSE/scatool-container/blob/1219101-quadlet/scamonitor.container) quadlet file
+   4. Install the [scamonitor.container](https://github.com/openSUSE/scatool-container/blob/main/scamonitor.container) quadlet file to `${HOME}/.config/containers/systemd/scamonitor.container`
 
 > [!NOTE]
 > The `scamonitor.service` will pull the `scatool:latest` image if not found. You can manually pull the image with:  
@@ -173,7 +173,7 @@ mkdir -p ${HOME}/.config/containers/systemd
 touch ${HOME}/.config/containers/mounts.conf
 cp scamonitor.container ${HOME}/.config/containers/systemd
 ```
-4. Reboot the server. This will enable unified cgroups and confirm the container service will start at boot time.
+4. Reboot the server. This will enable unified cgroups v2 and confirm the container service will start at boot time.
 5. Login as **scawork**:
    1. Check for cgroup version 2
    2. Check the `scamonitor.service` status
