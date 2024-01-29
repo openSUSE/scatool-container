@@ -80,7 +80,7 @@ ln -sf ${HOME}/.local/share/containers/storage/volumes/scavol/_data ${HOME}/scat
 mkdir -p ${HOME}/.config/containers/systemd
 cp scamonitor.container ${HOME}/.config/containers/systemd
 ```
-4. Start `scamonitor.service`
+4. Start `scamonitor.service` or [troubleshoot](#the-sca-tool-container-image-is-missing)
    1. You can reboot the server to confirm the `scamonitor.service` starts as expected. The scamonitor.service unit file will automatcially be generated.
       1. `sudo reboot`
       2. Login as **scawork**:
@@ -134,7 +134,7 @@ cp scamonitor.container ${HOME}/.config/containers/systemd
 5. Reboot the server. This will enable unified cgroups v2 and confirm the container service will start at boot time.
 6. Login as **scawork**:
    1. Check for cgroup version 2
-   2. Check the `scamonitor.service` status
+   2. Check the `scamonitor.service` status or [troubleshoot](#the-sca-tool-container-image-is-missing)
 ```
 podman info | grep cgroupVersion
   cgroupVersion: v2
@@ -183,7 +183,7 @@ cp scamonitor.container ${HOME}/.config/containers/systemd
 4. Reboot the server. This will enable unified cgroups v2 and confirm the container service will start at boot time.
 5. Login as **scawork**:
    1. Check for cgroup version 2
-   2. Check the `scamonitor.service` status
+   2. Check the `scamonitor.service` status or [troubleshoot](#the-sca-tool-container-image-is-missing)
 ```
 podman info | grep cgroupVersion
   cgroupVersion: v2
