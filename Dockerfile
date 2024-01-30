@@ -35,9 +35,10 @@ gzip \
 sca-patterns-base \
 sca-server-report \
 sca-patterns-alp1 \
-sca-patterns-sle11 \
-sca-patterns-sle12 \
 sca-patterns-sle15 \
+sca-patterns-sle12 \
+sca-patterns-sle11 \
+sca-patterns-hae \
 tar \
 xz && \
 zypper clean --all
