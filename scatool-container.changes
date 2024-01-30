@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Tue Jan 30 14:58:49 UTC 2024 - jason.record@suse.com
+
+- Changes in version 0.3
+  + Include sca-patterns-hae in Dockerfile (bsc#1219352)
+  + Include summary line in logs (bsc#1219353)
+
+-------------------------------------------------------------------
 Fri Jan 26 00:42:18 UTC 2024 - jason.record@suse.com
 
 - Updated README.md
