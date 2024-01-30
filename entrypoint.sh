@@ -1,6 +1,6 @@
 #!/bin/bash
-# Version:  1.0.8
-# Modified: 2024 Jan 24
+# Version:  1.0.9
+# Modified: 2024 Jan 30
 
 VOLDIR="/var/scatool"
 INCOMING="${VOLDIR}/incoming"
@@ -12,7 +12,7 @@ DATEFMT="%F %T.%N %z %Z"
 REPORTS_NEW=0
 REPORTS_BEFORE=0
 REPORTS_AFTER=0
-MONITORING_ID_CONFIRMED="ce4ebd84-bb19-4d42-a077-870ca0ad024d"
+MONITORING_ID_CONFIRMED="ce4ebd84"
 
 trap clean_up SIGTERM
 

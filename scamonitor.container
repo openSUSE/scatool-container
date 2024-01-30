@@ -5,9 +5,9 @@ Wants=network-online.target
 After=network-online.target
 
 [Container]
-Image=registry.opensuse.org/home/jrecord/branches/opensuse/templates/images/tumbleweed/containers/suse/alp/workloads/scatool:latest
+Image=registry.opensuse.org/suse/alp/workloads/tumbleweed_containerfiles/suse/alp/workloads/scatool:latest
 Environment=MONITORING=1
-Environment=MONITORING_ID=ce4ebd84-bb19-4d42-a077-870ca0ad024d
+Environment=MONITORING_ID=ce4ebd84
 Volume=scavol:/var/scatool
 ContainerName=scamonitor
 

@@ -73,7 +73,7 @@ loginctl enable-linger scawork
 
 > [!NOTE]
 > The `scamonitor.service` will pull the `scatool:latest` image if not found. You can manually pull the image with:  
-> `podman pull registry.opensuse.org/home/jrecord/branches/opensuse/templates/images/tumbleweed/containers/suse/alp/workloads/scatool:latest`
+> `podman pull registry.opensuse.org/suse/alp/workloads/tumbleweed_containerfiles/suse/alp/workloads/scatool:latest`
 
 ```
 ln -sf ${HOME}/.local/share/containers/storage/volumes/scavol/_data ${HOME}/scatool
@@ -123,7 +123,7 @@ grub2-mkconfig -o /boot/grub2/grub.cfg
 
 > [!NOTE]
 > The `scamonitor.service` will pull the `scatool:latest` image if not found. You can manually pull the image with:  
-> `podman pull registry.opensuse.org/home/jrecord/branches/opensuse/templates/images/tumbleweed/containers/suse/alp/workloads/scatool:latest`
+> `podman pull registry.opensuse.org/suse/alp/workloads/tumbleweed_containerfiles/suse/alp/workloads/scatool:latest`
 
 ```
 ln -sf ${HOME}/.local/share/containers/storage/volumes/scavol/_data ${HOME}/scatool
@@ -172,7 +172,7 @@ transactional-update grub.cfg
 
 > [!NOTE]
 > The `scamonitor.service` will pull the `scatool:latest` image if not found. You can manually pull the image with:  
-> `podman pull registry.opensuse.org/home/jrecord/branches/opensuse/templates/images/tumbleweed/containers/suse/alp/workloads/scatool:latest`
+> `podman pull registry.opensuse.org/suse/alp/workloads/tumbleweed_containerfiles/suse/alp/workloads/scatool:latest`
 
 ```
 ln -sf ${HOME}/.local/share/containers/storage/volumes/scavol/_data ${HOME}/scatool
@@ -199,7 +199,7 @@ systemctl --user status scamonitor
 3. Run the container to initialize the volume
 4. Create a symlink to the container's working directory
 ```
-podman pull registry.opensuse.org/home/jrecord/branches/opensuse/templates/images/tumbleweed/containers/suse/alp/workloads/scatool:latest
+podman pull registry.opensuse.org/suse/alp/workloads/tumbleweed_containerfiles/suse/alp/workloads/scatool:latest
 podman run -d --rm -v scavol:/var/scatool:z scatool:latest
 ln -sf ${HOME}/.local/share/containers/storage/volumes/scavol/_data ${HOME}/scatool
 ```
@@ -225,7 +225,7 @@ ls -l ${HOME}/scatool/reports
 1. Pull the new image
 2. Restart the `scamonitor.service` or re-run the SCA Tool Container as needed
 ```
-podman pull registry.opensuse.org/home/jrecord/branches/opensuse/templates/images/tumbleweed/containers/suse/alp/workloads/scatool:latest
+podman pull registry.opensuse.org/suse/alp/workloads/tumbleweed_containerfiles/suse/alp/workloads/scatool:latest
 systemtl --user restart scamonitor.service
 ```  
 [Top](#index-to-sections)
@@ -256,9 +256,9 @@ SourcePath=/home/scawork/.config/containers/systemd/scamonitor.container
 RequiresMountsFor=%t/containers
 
 [X-Container]
-Image=registry.opensuse.org/home/jrecord/branches/opensuse/templates/images/tumbleweed/containers/suse/alp/workloads/scatool:latest
+Image=registry.opensuse.org/suse/alp/workloads/tumbleweed_containerfiles/suse/alp/workloads/scatool:latest
 Environment=MONITORING=1
-Environment=MONITORING_ID=ce4ebd84-bb19-4d42-a077-870ca0ad024d
+Environment=MONITORING_ID=ce4ebd84
 Volume=scavol:/var/scatool
 ContainerName=scamonitor
 
@@ -273,7 +273,7 @@ Delegate=yes
 Type=notify
 NotifyAccess=all
 SyslogIdentifier=%N
-ExecStart=/usr/bin/podman run --name=scamonitor --cidfile=%t/%N.cid --replace --rm --cgroups=split --sdnotify=conmon -d -v scavol:/var/scatool --env MONITORING=1 --env MONITORING_ID=ce4ebd84-bb19-4d42-a077-870ca0ad024d registry.opensuse.org/home/jrecord/branches/opensuse/templates/images/tumbleweed/containers/suse/alp/workloads/scatool:latest
+ExecStart=/usr/bin/podman run --name=scamonitor --cidfile=%t/%N.cid --replace --rm --cgroups=split --sdnotify=conmon -d -v scavol:/var/scatool --env MONITORING=1 --env MONITORING_ID=ce4ebd84 registry.opensuse.org/suse/alp/workloads/tumbleweed_containerfiles/suse/alp/workloads/scatool:latest
 
 [Install]
 WantedBy=default.target
@@ -320,17 +320,17 @@ REPOSITORY  TAG         IMAGE ID    CREATED     SIZE
 
 Jan 26 10:22:53 localhost.localdomain systemd[917]: Starting SCA Tool Container...
 Jan 26 10:22:53 slem55 podman[1070]: 2024-01-26 10:22:53.360779919 +0000 UTC m=+0.072545099 system refresh
-Jan 26 10:22:53 slem55 scamonitor[1070]: Trying to pull registry.opensuse.org/home/jrecord/branches/opensuse/templates/images/tumbleweed/containers/suse/alp/workloads/scatool:latest...
-Jan 26 10:22:53 slem55 scamonitor[1070]: Pulling image registry.opensuse.org/home/jrecord/branches/opensuse/templates/images/tumbleweed/containers/suse/alp/workloads/scatool:latest inside systemd: setting pull tim>
-Jan 26 10:23:04 slem55 scamonitor[1070]: time="2024-01-26T10:23:04Z" level=warning msg="Failed, retrying in 1s ... (1/3). Error: initializing source docker://registry.opensuse.org/home/jrecord/branches/opensuse/te>
-Jan 26 10:23:15 slem55 scamonitor[1070]: time="2024-01-26T10:23:15Z" level=warning msg="Failed, retrying in 1s ... (2/3). Error: initializing source docker://registry.opensuse.org/home/jrecord/branches/opensuse/te>
-Jan 26 10:23:27 slem55 scamonitor[1070]: time="2024-01-26T10:23:27Z" level=warning msg="Failed, retrying in 1s ... (3/3). Error: initializing source docker://registry.opensuse.org/home/jrecord/branches/opensuse/te>
+Jan 26 10:22:53 slem55 scamonitor[1070]: Trying to pull registry.opensuse.org/suse/alp/workloads/tumbleweed_containerfiles/suse/alp/workloads/scatool:latest...
+Jan 26 10:22:53 slem55 scamonitor[1070]: Pulling image registry.opensuse.org/suse/alp/workloads/tumbleweed_containerfiles/suse/alp/workloads/scatool:latest inside systemd: setting pull tim>
+Jan 26 10:23:04 slem55 scamonitor[1070]: time="2024-01-26T10:23:04Z" level=warning msg="Failed, retrying in 1s ... (1/3). Error: initializing source docker://registry.opensuse.org/suse/alp>
+Jan 26 10:23:15 slem55 scamonitor[1070]: time="2024-01-26T10:23:15Z" level=warning msg="Failed, retrying in 1s ... (2/3). Error: initializing source docker://registry.opensuse.org/suse/alp>
+Jan 26 10:23:27 slem55 scamonitor[1070]: time="2024-01-26T10:23:27Z" level=warning msg="Failed, retrying in 1s ... (3/3). Error: initializing source docker://registry.opensuse.org/suse/alp>
 ```
 4. The `Error: initializing source` usually means the registry is busy or down, and the `Active: activating` status means systemd is trying to pull the current SCA Tool Container image from the registry.
 5. Manually pull the image until it downloads successfully.
 ```
-> podman pull registry.opensuse.org/home/jrecord/branches/opensuse/templates/images/tumbleweed/containers/suse/alp/workloads/scatool:latest
-Trying to pull registry.opensuse.org/home/jrecord/branches/opensuse/templates/images/tumbleweed/containers/suse/alp/workloads/scatool:latest...
+> podman pull registry.opensuse.org/suse/alp/workloads/tumbleweed_containerfiles/suse/alp/workloads/scatool:latest
+Trying to pull registry.opensuse.org/suse/alp/workloads/tumbleweed_containerfiles/suse/alp/workloads/scatool:latest...
 Getting image source signatures
 Copying blob bb3d399028e9 done   | 
 Copying blob b784dfba2061 done   | 
@@ -339,8 +339,8 @@ Writing manifest to image destination
 cd2a1d820afc1d3654140ecc1f91af076e3681a1d5d9bcbfe1ac7440681c66c3
 
 > podman images
-REPOSITORY                                                                                                              TAG         IMAGE ID      CREATED       SIZE
-registry.opensuse.org/home/jrecord/branches/opensuse/templates/images/tumbleweed/containers/suse/alp/workloads/scatool  latest      cd2a1d820afc  36 hours ago  305 MB
+REPOSITORY                                                                                            TAG         IMAGE ID      CREATED       SIZE
+registry.opensuse.org/suse/alp/workloads/tumbleweed_containerfiles/suse/alp/workloads/scatool:latest  latest      cd2a1d820afc  36 hours ago  305 MB
 ```
 6. Once downloaded, start the `scamonitor.service` with `systemctl --user start scamonitor.service`
 ```
@@ -380,8 +380,8 @@ Jan 26 10:37:58 slem55 scamonitor[1610]: 2024-01-26 10:37:58.551342527 +0000 UTC
 > Despite the fix, the issue persists with SLES 15 SP4
 ```
 > podman ps
-CONTAINER ID  IMAGE                                                                                                                          COMMAND     CREATED        STATUS        PORTS       NAMES
-cb77dc513e89  registry.opensuse.org/home/jrecord/branches/opensuse/templates/images/tumbleweed/containers/suse/alp/workloads/scatool:latest              3 minutes ago  Up 3 minutes              scamonitor
+CONTAINER ID  IMAGE                                                                                                 COMMAND     CREATED        STATUS        PORTS       NAMES
+cb77dc513e89  registry.opensuse.org/suse/alp/workloads/tumbleweed_containerfiles/suse/alp/workloads/scatool:latest              3 minutes ago  Up 3 minutes              scamonitor
 
 > podman logs scamonitor
 
