@@ -1,6 +1,6 @@
 #!/bin/bash
-# Version:  1.3.20
-# Modified: 2024 Jan 20
+# Version:  1.3.21
+# Modified: 2024 Jan 30
 
 BASE="/var/scatool"
 INDIR="${BASE}/incoming"
@@ -44,7 +44,7 @@ else
 	else
 		for filepath in ${INDIR}/*
 		do
-			sca_note "Processing $filepath"
+			sca_note "Analyzing $filepath"
 			if [[ ! -r $filepath ]]; then
 				sca_error "Cannot read file, try 'chmod 644 ${filepath}'"
 			else
@@ -63,6 +63,10 @@ else
 						BASE=${filepath%.*}
 						rm -rf $filepath $ACTIVE
 						[[ -e $BASE ]] && rm -rf $BASE
+						PRODUCTS=$(grep "^Supportconfig Products" ${LOG} | awk '{print $NF}')
+						EVALUATED=$(grep "^Patterns Evaluated" ${LOG} | awk '{print $NF}')
+						APPLIED=$(grep "^Patterns Evaluated" ${LOG} | awk '{print $NF}')
+						sca_note "${BASE##*/}: ${PRODUCTS}; Evaluated: ${EVALUATED}, Applied: ${APPLIED}"
 						grep "SCA Report File" $LOG | while IFS= read -r LINE
 						do
 							sca_note "SCA Report File ${LINE##* }"
