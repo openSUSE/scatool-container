@@ -1,18 +1,17 @@
 #!/bin/bash
-# Version:  1.3.21
-# Modified: 2024 Jan 30
+# Version:  1.3.22
+# Modified: 2024 Feb 01
 
-BASE="/var/scatool"
-INDIR="${BASE}/incoming"
-OUTDIR="${BASE}/reports"
-LOGDIR="${BASE}/logs"
+supportconfig_base_dir="/var/scatool"
+INDIR="${supportconfig_base_dir}/incoming"
+OUTDIR="${supportconfig_base_dir}/reports"
+LOGDIR="${supportconfig_base_dir}/logs"
 DATEFMT="%F %T.%N %z %Z"
-LOG="${LOGDIR}/sca-analysis-$(date +%Y%m%d-%H%M%S)"
 ACTIVE_FILE="${LOGDIR}/.sca-analysis.pid"
 
 sca_log() {
-    local TYPE="$1"; shift
-    printf "%s [%s] sca-analysis: %s\n" "$(date "+${DATEFMT}")" "$TYPE" "$*"
+    local this_type="$1"; shift
+    printf "%s [%s] sca-analysis: %s\n" "$(date "+${DATEFMT}")" "$this_type" "$*"
 }
 
 sca_note() {
@@ -32,14 +31,14 @@ clean_up() {
 }
 
 
-if ! [[ -d ${BASE} ]]; then
-	sca_error "Directory not found - ${BASE}"
+if ! [[ -d ${supportconfig_base_dir} ]]; then
+	sca_error "Directory not found - ${supportconfig_base_dir}"
 elif [[ -e $ACTIVE_FILE ]]; then
 	sca_warn "sca-analysis currently active: $ACTIVE_FILE"
 else
 	echo $$ >> $ACTIVE_FILE
-	FILES=$(ls -1 ${INDIR}/)
-	if [[ -z $FILES ]]; then
+	files=$(ls -1 ${INDIR}/)
+	if [[ -z $files ]]; then
 		sca_error "Missing supportconfig files - ${INDIR}"
 	else
 		for filepath in ${INDIR}/*
@@ -48,28 +47,35 @@ else
 			if [[ ! -r $filepath ]]; then
 				sca_error "Cannot read file, try 'chmod 644 ${filepath}'"
 			else
-				ACTIVE="${filepath}_active"
-				if [[ -e $ACTIVE ]]; then
+				active="${filepath}_active"
+				if [[ -e $active ]]; then
 					sca_warn "Supportconfig Analysis in Progress - $filepath"
 				else
-					ACCESS_TEST=$(tar --test-label -f ${filepath} 2>&1)
+					access_test=$(tar --test-label -f ${filepath} 2>&1)
 					if (( $? )); then
-						sca_error "Test failed: ${ACCESS_TEST}"
+						sca_error "Test failed: ${access_test}"
 					else
-						touch $ACTIVE
-						BASE_NAME="${filepath##*/}"
-						LOG="${LOGDIR}/sca-analysis-${BASE_NAME%%.*}"
-						scatool -t all -l3 -b -r -o ${OUTDIR} $filepath &> $LOG
-						BASE=${filepath%.*}
-						rm -rf $filepath $ACTIVE
-						[[ -e $BASE ]] && rm -rf $BASE
-						PRODUCTS=$(grep "^Supportconfig Products" ${LOG} | awk '{print $NF}')
-						EVALUATED=$(grep "^Patterns Evaluated" ${LOG} | awk '{print $NF}')
-						APPLIED=$(grep "^Patterns Evaluated" ${LOG} | awk '{print $NF}')
-						sca_note "${BASE##*/}: ${PRODUCTS}; Evaluated: ${EVALUATED}, Applied: ${APPLIED}"
-						grep "SCA Report File" $LOG | while IFS= read -r LINE
+						touch $active
+						base_name="${filepath##*/}"
+						log_file="${LOGDIR}/sca-analysis-${base_name%%.*}"
+						scatool -t all -l3 -b -r -o ${OUTDIR} $filepath &> $log_file
+						supportconfig_base_dir=${filepath%.*}
+						rm -rf $filepath $active
+						[[ -e $supportconfig_base_dir ]] && rm -rf $supportconfig_base_dir
+						products=$(grep "^Supportconfig Products" ${log_file} | cut -d= -f2)
+						evaluated=$(grep "^Patterns Evaluated" ${log_file} | cut -d= -f2)
+						applied=$(grep "^Applicable to Server" ${log_file} | cut -d= -f2)
+						shopt -s extglob
+						supportconfig_base_name=${supportconfig_base_dir##*/}
+						products=${products##*( )}
+						evaluated=${evaluated##*( )}
+						applied=${applied##*( )}
+						shopt -u extglob
+						sca_note "${supportconfig_base_name}: ${products}; Evaluated: ${evaluated}, Applied: ${applied}"
+						[[ "${applied}" == "0" ]] && sca_warn "${supportconfig_base_name}: See ${log_file}"
+						grep "SCA Report File" $log_file | while IFS= read -r line
 						do
-							sca_note "SCA Report File ${LINE##* }"
+							sca_note "${supportconfig_base_name}: Report ${line##* }"
 						done
 					fi
 				fi

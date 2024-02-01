@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Feb  1 06:14:47 UTC 2024 - jason.record@suse.com
+
+- Changes in version 0.4
+  + Removed gawk from sca-analysis (bsc#1219447)
+
+-------------------------------------------------------------------
 Tue Jan 30 17:47:24 UTC 2024 - jason.record@suse.com
 
 - Changes in version 0.3
