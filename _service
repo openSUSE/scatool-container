@@ -6,6 +6,10 @@
         <param name="var">REGISTRY</param>
         <param name="var">TAGPREFIX</param>
         <param name="var">LABELPREFIX</param>
+        <param name="var">IMG_TITLE</param>
+        <param name="var">IMG_DESC</param>
+        <param name="var">IMG_EULA</param>
+        <param name="var">IMG_SUPPORT_LEVEL</param>
         <param name="eval">
             PKG_VERSION=0.5
             REGISTRY=registry.opensuse.org
