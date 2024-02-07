@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Feb  7 05:42:23 UTC 2024 - jason.record@suse.com
+
+- Changes in version 0.5
+  + Container labels saved in container /etc/opt/image-release (bsc#1219635)
+
+-------------------------------------------------------------------
 Thu Feb  1 06:14:47 UTC 2024 - jason.record@suse.com
 
 - Changes in version 0.4

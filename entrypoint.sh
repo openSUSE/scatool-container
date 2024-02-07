@@ -1,8 +1,9 @@
 #!/bin/bash
-# Version:  1.0.9
-# Modified: 2024 Jan 30
+# Version:  1.0.10
+# Modified: 2024 Feb 06
 
 VOLDIR="/var/scatool"
+IMG_RELEASE="/etc/opt/image-release"
 INCOMING="${VOLDIR}/incoming"
 REPORTS="${VOLDIR}/reports"
 LOGS="${VOLDIR}/logs"
@@ -70,7 +71,15 @@ start_monitoring() {
 	done
 }
 
-sca_note "Supportconfig analysis workload container starting"
+if [[ -s $IMG_RELEASE ]]; then
+    . $IMG_RELEASE
+    sca_note "$IMG_TITLE starting"
+    sca_note "Image Version: ${IMG_VERSION}"
+    sca_note "Image URL:     ${IMG_URL}"
+    sca_note "Image EULA:    ${IMG_EULA}"
+else
+    sca_note "SCA Tool Container starting"
+fi
 sca_note "Package versions:"
 rpm -qa | grep '^sca-'
 echo

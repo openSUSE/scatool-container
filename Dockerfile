@@ -9,23 +9,32 @@ FROM opensuse/tumbleweed:latest
 ARG USERNAME="scawork"
 ARG HOMEDIR="/home/$USERNAME"
 ARG VOLDIR="/var/scatool"
+ARG IMG_RELEASE="/etc/opt/image-release"
 
 # Mandatory labels for the build service:
 #   https://en.opensuse.org/Building_derived_containers
 # labelprefix=%%LABELPREFIX%%
-LABEL org.opencontainers.image.title="SCA Tool Container"
-LABEL org.opencontainers.image.description="Container for supportconfig analysis with scatool"
+LABEL org.opencontainers.image.title="%%IMG_TITLE%%"
+LABEL org.opencontainers.image.description="%%IMG_DESC%%"
 LABEL org.opencontainers.image.created="%BUILDTIME%"
 LABEL org.opencontainers.image.version="%%PKG_VERSION%%.%RELEASE%"
 LABEL org.opencontainers.image.url="https://build.opensuse.org/package/show/SUSE:ALP:Workloads/scatool-container"
 LABEL org.openbuildservice.disturl="%DISTURL%"
 LABEL org.opensuse.reference="%%REGISTRY%%/%%TAGPREFIX%%/scatool:%%PKG_VERSION%%.%RELEASE%"
 LABEL org.openbuildservice.disturl="%DISTURL%"
-LABEL com.suse.supportlevel="techpreview"
-LABEL com.suse.eula="beta"
+LABEL com.suse.supportlevel="%%IMG_SUPPORT_LEVEL%%"
+LABEL com.suse.eula="%%IMG_EULA%%"
 LABEL com.suse.image-type="application"
 LABEL com.suse.release-stage="prototype"
 # endlabelprefix
+
+RUN \
+echo "IMG_TITLE=\"%%IMG_TITLE%%\"" > $IMG_RELEASE && \
+echo "IMG_DESC=\"%%IMG_DESC%%\"" >> $IMG_RELEASE && \
+echo "IMG_VERSION=\"%%PKG_VERSION%%.%RELEASE%\"" >> $IMG_RELEASE && \
+echo 'IMG_URL="https://build.opensuse.org/package/show/SUSE:ALP:Workloads/scatool-container"' >> $IMG_RELEASE && \
+echo "IMG_EULA=\"%%IMG_EULA%%\"" >> $IMG_RELEASE && \
+echo "IMG_SUPPORT_LEVEL=\"%%IMG_SUPPORT_LEVEL%%\"" >> $IMG_RELEASE
 
 RUN echo "+ Installing the SCA Tool application" && \
 zypper --non-interactive install --allow-unsigned-rpm \

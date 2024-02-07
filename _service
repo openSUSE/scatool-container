@@ -7,10 +7,14 @@
         <param name="var">TAGPREFIX</param>
         <param name="var">LABELPREFIX</param>
         <param name="eval">
-            PKG_VERSION=0.4
+            PKG_VERSION=0.5
             REGISTRY=registry.opensuse.org
             TAGPREFIX=suse/alp/workloads
             LABELPREFIX=com.suse.alp.workloads.scatool
+            IMG_TITLE="SCA Tool Container"
+            IMG_DESC="Container for supportconfig analysis with scatool"
+            IMG_EULA="beta"
+            IMG_SUPPORT_LEVEL="techpreview"
         </param>
         <param name="verbose">1</param>
     </service>
